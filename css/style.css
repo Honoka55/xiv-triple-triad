@@ -1,0 +1,237 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #7b5284;
+}
+
+.bg-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/ui/bg.jpg");
+    background-size: 100% 100%;
+    background-position: center center;
+}
+
+@media only screen and (max-width: 768px) {
+    .bg-image {
+        background-image: url("../img/ui/bg-vertical.jpg");
+    }
+}
+
+.container {
+    display: flex;
+    flex-wrap: nowrap;
+    position: absolute;
+}
+
+.board {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cell {
+    width: 33.333%;
+    height: 33.333%;
+    position: relative;
+    background-image: url("../img/ui/cell.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center center;
+}
+
+.player-hand,
+.computer-hand {
+    /* width: 25%; */
+    height: 100%;
+    /* border: 1px solid #000; */
+    display: flex;
+    align-items: center; /* 纵向居中 */
+    justify-content: center; /* 横向居中 */
+}
+
+.card-container {
+    width: 104px;
+    height: 128px;
+    margin: 0 auto;
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.player-card {
+    width: 104px;
+    height: 128px;
+    margin: 0 auto;
+    position: relative;
+    background: url(../img/back/blue.png) no-repeat center;
+}
+
+.computer-card {
+    width: 104px;
+    height: 128px;
+    margin: 0 auto;
+    position: relative;
+    background: url(../img/back/red.png) no-repeat center;
+}
+
+.outcard {
+    width: 104px;
+    height: 128px;
+    margin: 0 auto;
+    position: relative;
+    background: url(../img/back/outcard.png) no-repeat center;
+}
+
+/* 当屏幕宽度大于768px时 */
+@media screen and (min-width: 768px) {
+    .container {
+        flex-direction: row;
+        top: 7%;
+        bottom: 7%;
+        left: 3%;
+        right: 3%;
+    }
+    .board {
+        width: 100vh;
+    }
+    .player-hand,
+    .computer-hand {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .player-hand .card-container,
+    .computer-hand .card-container {
+        flex-basis: 30%;
+    }
+}
+
+/* 当屏幕宽度小于768px时 */
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        top: 3%;
+        bottom: 3%;
+        left: 7%;
+        right: 7%;
+    }
+    .board {
+        height: 100vw;
+    }
+    .player-hand,
+    .computer-hand {
+        width: 100%;
+        height: 25%;
+    }
+    /* 将己方信息放在下面，敌方信息放在上面 */
+    .computer-hand {
+        order: -1;
+    }
+    .player-hand {
+        order: 1;
+    }
+    .player-hand,
+    .computer-hand {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+    .player-hand .card-container,
+    .computer-hand .card-container {
+        flex-basis: calc(20% - 10px);
+    }
+}
+
+/* 卡牌在 .cell 中居中显示 */
+.cell .card-tooltip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.selected {
+    position: relative;
+    top: -5px;
+    box-shadow: 0 0 5px white;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1em;
+    border-radius: 0.5em;
+    z-index: 11;
+}
+
+.overlay button {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+    margin-top: 1em;
+    cursor: pointer;
+}
+
+.overlay button:hover {
+    background-color: darkblue;
+}
+
+.overlay button:active {
+    background-color: navy;
+}
+
+.message {
+    font-size: 36px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    z-index: 11;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+}

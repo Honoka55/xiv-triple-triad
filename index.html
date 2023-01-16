@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/card.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<title>Triple Triad</title>
+</head>
+
+<body>
+	<div class="bg-image"></div>
+	<div class="container">
+		<div class="player-hand">己方<br /></div>
+		<div class="board">
+			<div class="cell"></div>
+			<div class="cell"></div>
+			<div class="cell"></div>
+			<div class="cell"></div>
+			<div class="cell"></div>
+			<div class="cell"></div>
+			<div class="cell"></div>
+			<div class="cell"></div>
+			<div class="cell"></div>
+		</div>
+		<div class="computer-hand">敌方<br /></div>
+	</div>
+	<script src="js/fetch.js"></script>
+	<script src="js/html.js"></script>
+	<script src="js/board.js"></script>
+	<script src="js/card.js"></script>
+	<script src="js/cell.js"></script>
+	<script src="js/game.js"></script>
+	<script>
+		// let cardlist = await loadCards();
+		// console.log(cardlist);
+		game = new Game();
+		game.start();
+	</script>
+</body>
+
+</html>
