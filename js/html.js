@@ -167,7 +167,7 @@ function displayCards(cards, owner, num) {
         cardDiv.innerHTML = `
             <div class="card-tooltip">
                 <div class="card-img">
-                    <img alt="${card.name}" src="https://cdn.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/card/${String(card.img).padStart(6, "0")}.png"
+                    <img alt="${card.name}" src="https://gcore.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/card/${String(card.img).padStart(6, "0")}.png"
                     decoding="async" title="${card.name}" width="104" height="128" />
                 </div>
                 <div class="card-rarity card-rarity-${card.rarity}"></div>
