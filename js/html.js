@@ -1,9 +1,9 @@
-const playerHandDiv = document.querySelector(".player-hand");
-const computerHandDiv = document.querySelector(".computer-hand");
-const boardDiv = document.querySelector(".board");
-const cells = boardDiv.querySelectorAll(".cell");
+const playerHandDiv = document.querySelector('.player-hand');
+const computerHandDiv = document.querySelector('.computer-hand');
+const boardDiv = document.querySelector('.board');
+const cells = boardDiv.querySelectorAll('.cell');
 for (let i = 0; i < cells.length; i++) {
-    cells[i].setAttribute("id", "cell-" + i);
+    cells[i].setAttribute('id', 'cell-' + i);
     cells[i].dataset.cellId = i;
 }
 
@@ -87,44 +87,46 @@ function showRuleSelect() {
         'all-open': ['three-open'],
         'three-open': ['all-open'],
         'roulette': ['all-open', 'three-open', 'same', 'sudden-death', 'plus', 'order', 'chaos', 'reverse', 'ace-killer', 'type-ascend', 'type-descend', 'swap']
-      };
+    };
     const rules = document.querySelectorAll('.rules-content input[type="checkbox"]');
     const startButton = document.querySelector('#start-btn');
-    rules.forEach(rule => {
+    rules.forEach((rule) => {
         rule.addEventListener('change', function () {
             if (this.checked) {
                 const exclusiveRuleGroup = exclusiveRules[this.id];
                 if (exclusiveRuleGroup) {
-                exclusiveRuleGroup.forEach(ruleId => {
-                    const rule = document.getElementById(ruleId);
-                    rule.checked = false;
-                    rule.disabled = true;
-                });
+                    exclusiveRuleGroup.forEach((ruleId) => {
+                        const rule = document.getElementById(ruleId);
+                        rule.checked = false;
+                        rule.disabled = true;
+                    });
                 }
             } else {
                 const exclusiveRuleGroup = exclusiveRules[this.id];
                 if (exclusiveRuleGroup) {
-                    exclusiveRuleGroup.forEach(ruleId => {
-                    const rule = document.getElementById(ruleId);
-                    rule.disabled = false;
+                    exclusiveRuleGroup.forEach((ruleId) => {
+                        const rule = document.getElementById(ruleId);
+                        rule.disabled = false;
                     });
                 }
             }
-            const randomCheck = document.getElementById("random-hand").checked;
-            const draftCheck = document.getElementById("draft").checked;
+            const randomCheck = document.getElementById('random-hand').checked;
+            const draftCheck = document.getElementById('draft').checked;
             if (!randomCheck && !draftCheck) {
                 startButton.disabled = true;
-                startButton.title = "随机和选拔规则需选择一个";
+                startButton.title = '随机和选拔规则需选择一个';
             } else {
                 startButton.disabled = false;
-                startButton.removeAttribute("title");
+                startButton.removeAttribute('title');
             }
         });
     });
 
     // 禁用还未实现的规则
-    rules.forEach(rule => {
-        if (!['all-open', 'three-open', 'swap'].includes(rule.id)) rule.disabled = true;
+    rules.forEach((rule) => {
+        if (!['all-open', 'three-open', 'swap'].includes(rule.id)) {
+            rule.disabled = true;
+        }
     });
 
     // 开始按钮
@@ -135,7 +137,7 @@ function showRuleSelect() {
             for (let i = 0; i < ruleElements.length; i++) {
                 selectedRules.push(ruleElements[i].value);
             }
-            document.getElementsByClassName('container')[0].style.display = "flex";
+            document.getElementsByClassName('container')[0].style.display = 'flex';
             overlay.remove();
             game = new Game(selectedRules);
             game.start();
@@ -145,7 +147,7 @@ function showRuleSelect() {
 
 // 展示双方手牌
 function displayCards(cards, owner, num) {
-    handDiv = (owner == "player") ? playerHandDiv : computerHandDiv;
+    handDiv = owner == 'player' ? playerHandDiv : computerHandDiv;
     let showSet = new Set();
     switch (num) {
         case 0:
@@ -163,11 +165,11 @@ function displayCards(cards, owner, num) {
             break;
     }
     cards.forEach((card, index) => {
-        let cardDiv = document.createElement("div");
+        let cardDiv = document.createElement('div');
         cardDiv.innerHTML = `
             <div class="card-tooltip">
                 <div class="card-img">
-                    <img alt="${card.name}" src="https://gcore.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/card/${String(card.img).padStart(6, "0")}.png"
+                    <img alt="${card.name}" src="https://gcore.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/card/${String(card.img).padStart(6, '0')}.png"
                     decoding="async" title="${card.name}" width="104" height="128" />
                 </div>
                 <div class="card-rarity card-rarity-${card.rarity}"></div>
@@ -180,31 +182,31 @@ function displayCards(cards, owner, num) {
                 </div>
             </div>
         `;
-        cardDiv.classList.add("card-container", owner+"-card");
+        cardDiv.classList.add('card-container', owner + '-card');
         if (!showSet.has(index)) {
-            cardDiv.classList.add("cardback");
+            cardDiv.classList.add('cardback');
         }
-        cardDiv.setAttribute("id", owner + "-card-" + index);
-        cardDiv.setAttribute("data-card-id", card.num);
+        cardDiv.setAttribute('id', owner + '-card-' + index);
+        cardDiv.setAttribute('data-card-id', card.num);
         handDiv.appendChild(cardDiv);
     });
 }
 
 // 放置卡牌到棋盘
 function displayCard(card, index) {
-    let cardDiv = document.getElementById(card.owner + "-card-" + card.num % 5);
-    let cellDiv = document.getElementById("cell-" + index);
+    let cardDiv = document.getElementById(card.owner + '-card-' + (card.num % 5));
+    let cellDiv = document.getElementById('cell-' + index);
     cellDiv.innerHTML = cardDiv.innerHTML;
     cardDiv.innerHTML = ``;
-    cardDiv.classList.remove("cardback");
-    cardDiv.classList.add("outcard");
+    cardDiv.classList.remove('cardback');
+    cardDiv.classList.add('outcard');
 }
 
 // 清空游戏
 function clearGame() {
     // 清除棋盘上的卡牌
     for (let i = 0; i < 9; i++) {
-        let cellDiv = document.getElementById("cell-" + i);
+        let cellDiv = document.getElementById('cell-' + i);
         while (cellDiv.firstChild) {
             cellDiv.removeChild(cellDiv.firstChild);
         }
@@ -216,11 +218,11 @@ function clearGame() {
 
 function showMaskedMessage(message) {
     // 创建遮罩元素
-    let overlay = document.createElement("div");
-    overlay.classList.add("overlay");
+    let overlay = document.createElement('div');
+    overlay.classList.add('overlay');
     // 创建消息元素
-    let messageElement = document.createElement("div");
-    messageElement.classList.add("message");
+    let messageElement = document.createElement('div');
+    messageElement.classList.add('message');
     messageElement.textContent = message;
     // 将消息添加到遮罩中
     overlay.appendChild(messageElement);
@@ -240,11 +242,11 @@ function showMaskedMessage(message) {
 
 function showStringWithButton(message, callback) {
     // 创建遮罩元素
-    let overlay = document.createElement("div");
-    overlay.classList.add("overlay");
+    let overlay = document.createElement('div');
+    overlay.classList.add('overlay');
     // 创建消息元素
-    let messageElement = document.createElement("div");
-    messageElement.classList.add("message");
+    let messageElement = document.createElement('div');
+    messageElement.classList.add('message');
     messageElement.textContent = message;
     // 将消息添加到遮罩中
     overlay.appendChild(messageElement);
@@ -283,9 +285,9 @@ function showStringWithButton(message, callback) {
 }
 
 function displayRules(rules) {
-    let ruleDiv = document.createElement("div");
-    ruleDiv.classList.add("rule-label");
-    ruleDiv.innerHTML = '当前规则：' + rules.join("、") + ' <a href="javascript:location.reload();">重设</a>';
+    let ruleDiv = document.createElement('div');
+    ruleDiv.classList.add('rule-label');
+    ruleDiv.innerHTML = '当前规则：' + rules.join('、') + ' <a href="javascript:location.reload();">重设</a>';
     document.body.appendChild(ruleDiv);
 }
 
@@ -294,8 +296,8 @@ function showSwapCards(playerCard, computerCard) {
     const playerCardContainer = document.querySelector(`#player-card-${playerCard}`);
     const computerCardContainer = document.querySelector(`#computer-card-${computerCard}`);
     // 为.card-container添加selected类
-    playerCardContainer.classList.add("selected");
-    computerCardContainer.classList.add("selected");
+    playerCardContainer.classList.add('selected');
+    computerCardContainer.classList.add('selected');
 
     setTimeout(() => {
         // 交换两个.card-container的内容物
@@ -304,8 +306,8 @@ function showSwapCards(playerCard, computerCard) {
         computerCardContainer.innerHTML = playerCardHTML;
         setTimeout(() => {
             // 移除selected类
-            playerCardContainer.classList.remove("selected");
-            computerCardContainer.classList.remove("selected");
+            playerCardContainer.classList.remove('selected');
+            computerCardContainer.classList.remove('selected');
         }, 400);
     }, 400);
 }

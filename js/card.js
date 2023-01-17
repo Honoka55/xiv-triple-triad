@@ -9,6 +9,6 @@ class Card {
         this.type = type;
         this.img = img;
         this.num = num;
-        this.owner = (Math.floor(this.num / 5) == 0) ? "player" : "computer";
+        this.owner = Math.floor(this.num / 5) == 0 ? 'player' : 'computer';
     }
 }

@@ -15,7 +15,6 @@ class Board {
     placeCard(index, card) {
         // 如果该位置已经有卡牌，则不能放置
         if (this.grid[index].card) {
-            console.log("Error: Position already occupied.");
             return;
         }
         // 将卡牌放入棋盘上的该位置
@@ -43,13 +42,12 @@ class Board {
             }
         }
         if (this.isFull()) {
-            console.log("The board is full, no more cards can be added.");
             return;
         }
     }
 
     isFull() {
-        return this.grid.every(cell => cell.card);
+        return this.grid.every((cell) => cell.card);
     }
 
     countCards(player) {
