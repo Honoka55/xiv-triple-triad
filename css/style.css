@@ -355,12 +355,19 @@ input[type="checkbox"] {
     text-decoration: underline;
 }
 
+.rules-modal .copyright-text {
+    font-size: 12px;
+    text-align: center;
+    white-space: nowrap;
+}
+
 @media screen and (max-width: 768px) {
     .rule-label {
         top: 0;
         right: 0;
         width: 100%;
     }
+
     .rule-label a {
         float: right;
     }

@@ -76,6 +76,7 @@ function showRuleSelect() {
                 </div>
             </div>
             <button id="start-btn" type="button">开始</button>
+            <p class="copyright-text">[FFXIV Materials] <wbr>Copyright © 2010-2023 SQUARE ENIX CO., LTD. All Rights Reserved.</p>
         </div>
     `;
 
