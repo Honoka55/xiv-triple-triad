@@ -175,6 +175,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .modal {
@@ -188,22 +189,28 @@ body {
     z-index: 11;
 }
 
+.overlay .button-container {
+    display: flex;
+    justify-content: center;
+}
+
 .overlay button {
-    background-color: blue;
+    background-color: #7b5284;
     color: white;
     border: none;
-    padding: 0.5em 1em;
-    border-radius: 0.5em;
-    margin-top: 1em;
+    padding: 1em 2em;
+    border-radius: 1em;
     cursor: pointer;
+    margin: 0 1em;
+    font-size: 1.2em;
 }
 
 .overlay button:hover {
-    background-color: darkblue;
+    background-color: #55435b;
 }
 
 .overlay button:active {
-    background-color: navy;
+    background-color: #3d2942;
 }
 
 .message {
@@ -212,12 +219,13 @@ body {
     color: white;
     text-align: center;
     z-index: 11;
+    margin-bottom: 1em;
 }
 
 @keyframes fade-in {
     from {
         opacity: 0;
-        transform: translateX(100%);
+        transform: translateX(50%);
     }
     to {
         opacity: 1;
@@ -232,6 +240,6 @@ body {
     }
     to {
         opacity: 0;
-        transform: translateX(-100%);
+        transform: translateX(-50%);
     }
 }

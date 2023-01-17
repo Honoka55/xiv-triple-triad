@@ -71,14 +71,14 @@ function showMaskedMessage(message) {
     // 将遮罩添加到页面中
     document.body.appendChild(overlay);
     // Animate message
-    messageElement.style.animation = 'fade-in 0.7s ease-out forwards';
-    // Remove overlay and message after 1.5s
+    messageElement.style.animation = 'fade-in 0.5s ease-out forwards';
+    // Remove overlay and message
     setTimeout(() => {
-        messageElement.style.animation = 'fade-out 0.7s ease-out forwards';
+        messageElement.style.animation = 'fade-out 0.5s ease-out forwards';
         setTimeout(() => {
             messageElement.remove();
             overlay.remove();
-        }, 700);
+        }, 500);
     }, 800);
 }
 
@@ -95,14 +95,33 @@ function showStringWithButton(message, callback) {
     // 将遮罩添加到页面中
     document.body.appendChild(overlay);
 
-    // Create button
-    let button = document.createElement('button');
-    button.innerHTML = 'Restart';
-    overlay.appendChild(button);
+    // create button container
+    let buttonContainer = document.createElement('div');
+    buttonContainer.classList.add('button-container');
+    overlay.appendChild(buttonContainer);
 
-    // Add event listener to button
-    button.addEventListener('click', () => {
+    // create first button
+    let firstButton = document.createElement('button');
+    firstButton.innerText = 'Restart';
+    firstButton.addEventListener('click', () => {
         callback();
         overlay.remove();
     });
+    buttonContainer.appendChild(firstButton);
+
+    // create second button
+    let secondButton = document.createElement('button');
+    secondButton.innerText = 'Home';
+    secondButton.addEventListener('click', () => {
+        window.location.href = 'https://honoka55.github.io';
+    });
+    buttonContainer.appendChild(secondButton);
+
+    // create third button
+    let thirdButton = document.createElement('button');
+    thirdButton.innerText = 'Repo';
+    thirdButton.addEventListener('click', () => {
+        window.location.href = 'https://github.com/Honoka55/xiv-triple-triad';
+    });
+    buttonContainer.appendChild(thirdButton);
 }
