@@ -14,14 +14,14 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("../img/ui/bg.jpg");
+    background-image: url("https://cdn.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/ui/bg.jpg");
     background-size: 100% 100%;
     background-position: center center;
 }
 
 @media only screen and (max-width: 768px) {
     .bg-image {
-        background-image: url("../img/ui/bg-vertical.jpg");
+        background-image: url("https://cdn.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/ui/bg-vertical.jpg");
     }
 }
 
@@ -41,7 +41,7 @@ body {
     width: 33.333%;
     height: 33.333%;
     position: relative;
-    background-image: url("../img/ui/cell.png");
+    background-image: url("https://cdn.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/ui/cell.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: center center;
@@ -71,7 +71,7 @@ body {
     height: 128px;
     margin: 0 auto;
     position: relative;
-    background: url(../img/back/blue.png) no-repeat center;
+    background: url("https://cdn.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/back/blue.png") no-repeat center;
 }
 
 .computer-card {
@@ -79,7 +79,7 @@ body {
     height: 128px;
     margin: 0 auto;
     position: relative;
-    background: url(../img/back/red.png) no-repeat center;
+    background: url("https://cdn.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/back/red.png") no-repeat center;
 }
 
 .outcard {
@@ -87,7 +87,7 @@ body {
     height: 128px;
     margin: 0 auto;
     position: relative;
-    background: url(../img/back/outcard.png) no-repeat center;
+    background: url("https://cdn.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/back/outcard.png") no-repeat center;
 }
 
 .cardback {
@@ -95,7 +95,7 @@ body {
     height: 128px;
     margin: 0 auto;
     position: relative;
-    background: url(../img/back/card.png) no-repeat center;
+    background: url("https://cdn.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/back/card.png") no-repeat center;
 }
 
 .cardback * {
