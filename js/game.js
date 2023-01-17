@@ -1,5 +1,6 @@
 class Game {
-    constructor() {
+    constructor(rules) {
+        this.rules = rules;
         this.board = new Board();
         this.playerHand = [];
         this.computerHand = [];
@@ -8,6 +9,7 @@ class Game {
     }
 
     async start() {
+        displayRules(this.rules);
         // 重置游戏状态
         this.playerHand = [];
         this.computerHand = [];
@@ -20,12 +22,10 @@ class Game {
             let selectedCard = cards[randomIndex];
             if (selectedCard.稀有度 === 4 || selectedCard.稀有度 === 5) {
                 if (rare4or5Counter >= 2) {
-                    console.log("continue");
                     continue;
                 }
                 if (selectedCard.稀有度 === 5) {
                     if (rare5Counter >= 1) {
-                        console.log("continue");
                         continue;
                     }
                     rare5Counter++;
@@ -43,12 +43,10 @@ class Game {
             let selectedCard = cards[randomIndex];
             if (selectedCard.稀有度 === 4 || selectedCard.稀有度 === 5) {
                 if (rare4or5Counter >= 2) {
-                    console.log("continue");
                     continue;
                 }
                 if (selectedCard.稀有度 === 5) {
                     if (rare5Counter >= 1) {
-                        console.log("continue");
                         continue;
                     }
                     rare5Counter++;
@@ -59,32 +57,36 @@ class Game {
             this.computerHand.push(card);
             cards.splice(randomIndex, 1);
         }
-        displayCards(this.playerHand, "player");
-        displayCards(this.computerHand, "computer");
-        // 随机指定先手
-        var randomArr = Array.from({length: 3}, () => Math.round(Math.random()));
-        let show = '开始！';
-        for(var i = 0; i < randomArr.length; i++) {
-            if(randomArr[i] === 0) {
-                show = show + "蓝";
-            } else {
-                show = show + "红";
-            }
-        }
-        showMaskedMessage(show);
+        this.handleOpenRules();
         setTimeout(() => {
-            if(randomArr.filter(x => x === 0).length > randomArr.filter(x => x === 1).length) {
-                this.turn = "player";
-                showMaskedMessage("蓝方出牌");
-                this.play();
-            } else {
-                this.turn = "computer";
-                showMaskedMessage("红方出牌");
+            this.handleSwapRule();
+            setTimeout(() => {
+                // 随机指定先手
+                var randomArr = Array.from({length: 3}, () => Math.round(Math.random()));
+                let show = '开始！';
+                for(var i = 0; i < randomArr.length; i++) {
+                    if(randomArr[i] === 0) {
+                        show = show + "蓝";
+                    } else {
+                        show = show + "红";
+                    }
+                }
+                showMaskedMessage(show);
                 setTimeout(() => {
-                    this.computerTurn();
-                }, 2800);
-            }
-        }, 1300);
+                    if(randomArr.filter(x => x === 0).length > randomArr.filter(x => x === 1).length) {
+                        this.turn = "player";
+                        showMaskedMessage("蓝方出牌");
+                        this.play();
+                    } else {
+                        this.turn = "computer";
+                        showMaskedMessage("红方出牌");
+                        setTimeout(() => {
+                            this.computerTurn();
+                        }, 2800);
+                    }
+                }, 1300);
+            }, this.rules.filter(rule => ["order", "chaos", "reverse", "swap"].includes(rule)).length * 2500);
+        }, this.rules.filter(rule => ["all-open", "three-open"].includes(rule)).length * 1200);
     }
 
     play() {
@@ -122,7 +124,6 @@ class Game {
                         this.computerTurn();
                     }, 2800);
                 }, 700);
-                
             }
         }
         let playerHandClickHandler = (event) => {
@@ -263,5 +264,40 @@ class Game {
         this.board.reset();
         this.gameOver = false;
         this.start();
+    }
+
+    handleOpenRules() {
+        // 处理全明牌和三明牌规则
+        displayCards(this.playerHand, "player", 5);
+        if (this.rules.includes("all-open")) {
+            displayCards(this.computerHand, "computer", 5);
+            showMaskedMessage("全明牌");
+        } else if (this.rules.includes("three-open")) {
+            displayCards(this.computerHand, "computer", 3);
+            showMaskedMessage("三明牌");
+        } else {
+            displayCards(this.computerHand, "computer", 0);
+        }
+    }
+
+    handleSwapRule() {
+        // 处理交换规则
+        if (!this.rules.includes("swap")) {
+            return;
+        }
+        let playerIndex = Math.floor(Math.random() * this.playerHand.length);
+        let computerIndex = Math.floor(Math.random() * this.computerHand.length);
+        console.log('player#'+playerIndex+' '+this.playerHand[playerIndex].name+' <=> computer#'+computerIndex+' '+this.computerHand[computerIndex].name);
+        // 交换位置
+        [this.playerHand[playerIndex], this.computerHand[computerIndex]] = [this.computerHand[computerIndex], this.playerHand[playerIndex]];
+        this.playerHand[playerIndex].owner = "player";
+        this.computerHand[computerIndex].owner = "computer";
+        this.playerHand[playerIndex].num = playerIndex;
+        this.computerHand[computerIndex].num = computerIndex + 5;
+        // 更新界面显示
+        showMaskedMessage("交换");
+        setTimeout(() => {
+            showSwapCards(playerIndex, computerIndex);
+        }, 1200);
     }
 }

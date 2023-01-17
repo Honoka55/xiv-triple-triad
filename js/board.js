@@ -45,12 +45,12 @@ class Board {
         if (this.isFull()) {
             console.log("The board is full, no more cards can be added.");
             return;
-        }        
+        }
     }
 
     isFull() {
         return this.grid.every(cell => cell.card);
-    }    
+    }
 
     countCards(player) {
         let count = 0;

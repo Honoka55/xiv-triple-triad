@@ -1,12 +1,11 @@
 /* 以下内容摘自最终幻想XIV中文维基，以CC BY-NC-SA 3.0协议共享，有修改。
-   原文链接：https://ff14.huijiwiki.com/wiki/MediaWiki:Common.css */
+   引用版本固定链接：https://ff14.huijiwiki.com/index.php?oldid=1227576 */
 
 .card-tooltip {
     width: 104px;
     height: 128px;
     margin: 0 auto;
     position: relative;
-    /* background: url(../img/res/CardBG.png); */
 }
  
 .card-rarity-1 {

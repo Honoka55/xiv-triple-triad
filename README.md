@@ -3,13 +3,14 @@
 
 ## Introduction
 
-It’s currently **All Open** by default. (laugh) I think I will go on improving this.
+I think I will go on maintaining this. ChatGPT writes most of the codes though.
 
 Huijiwiki API employed. Hope it won’t be enough to trouble that resin figure maker.
 
 ## Change log
 
-- 2023-01-17 - Basic game functionality implemented. **All Open** by default.
+- 2023-01-17: **All Open**, **Three Open** and **Swap** rules are available.
+- 2023-01-17: Basic game functionality implemented. **All Open** by default.
 
 ## License
 
