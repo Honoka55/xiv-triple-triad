@@ -30,14 +30,19 @@ class Board {
             if (card) {
                 // 如果这个格子有卡牌
                 let cardDiv = cell.querySelector('.card-tooltip');
+                let cellDiv = cells[i];
                 if (this.grid[i].owner === 'player') {
                     // 更新视图，将卡牌div添加.player-card类
                     cardDiv.classList.remove('computer-card');
                     cardDiv.classList.add('player-card');
+                    cellDiv.classList.remove('computer-cell');
+                    cellDiv.classList.add('player-cell');
                 } else {
                     // 更新视图，将卡牌div添加.computer-card类
                     cardDiv.classList.remove('player-card');
                     cardDiv.classList.add('computer-card');
+                    cellDiv.classList.remove('player-cell');
+                    cellDiv.classList.add('computer-cell');
                 }
             }
         }

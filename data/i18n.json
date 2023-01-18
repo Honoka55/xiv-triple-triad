@@ -18,7 +18,18 @@
         "type-descend": "同类弱化",
         "swap": "交换",
         "roulette": "天选",
-        "draft": "选拔"
+        "draft": "选拔",
+        "home": "主页",
+        "repository": "仓库",
+        "restart": "重新开始",
+        "current-rules": "当前规则",
+        "reset": "重设",
+        "blue-turn": "蓝方回合",
+        "red-turn": "红方回合",
+        "combo": "连携",
+        "blue-wins": "蓝方胜利",
+        "red-wins": "红方胜利",
+        "draw": "不分胜负"
     },
     "ja": {
         "triple-triad": "トリプルトライアド",
@@ -39,7 +50,18 @@
         "type-descend": "タイプディセンド",
         "swap": "スワップ",
         "roulette": "ルーレット",
-        "draft": "ドラフト"
+        "draft": "ドラフト",
+        "home": "ホーム",
+        "repository": "リポジトリ",
+        "restart": "リスタート",
+        "current-rules": "現在のルール",
+        "reset": "リセット",
+        "blue-turn": "ブルーターン",
+        "red-turn": "レッドターン",
+        "combo": "コンボ",
+        "blue-wins": "ブルーウィンズ",
+        "red-wins": "レッドウィンズ",
+        "draw": "ドロー"
     },
     "en": {
         "triple-triad": "Triple Triad",
@@ -60,7 +82,18 @@
         "type-descend": "Descension",
         "swap": "Swap",
         "roulette": "Roulette",
-        "draft": "Draft"
+        "draft": "Draft",
+        "home": "Home",
+        "repository": "Repo",
+        "restart": "Restart",
+        "current-rules": "Current Rules",
+        "reset": "Reset",
+        "blue-turn": "Blue Turn",
+        "red-turn": "Red Turn",
+        "combo": "Combo",
+        "blue-wins": "Blue Wins",
+        "red-wins": "Red Wins",
+        "draw": "Draw"
     },
     "fr": {
         "triple-triad": "Triple Triade",
@@ -81,7 +114,18 @@
         "type-descend": "Malus",
         "swap": "Échange",
         "roulette": "Roulette",
-        "draft": "Draft"
+        "draft": "Draft",
+        "home": "Accueil",
+        "repository": "Référentiels",
+        "restart": "Redémarrage",
+        "current-rules": "Règles actuelles",
+        "reset": "Réinitialiser",
+        "blue-turn": "Au bleu de jouer",
+        "red-turn": "Au rouge de jouer",
+        "combo": "Combo",
+        "blue-wins": "Le bleu a gagné",
+        "red-wins": "Le rouge a gagné",
+        "draw": "Match nul"
     },
     "de": {
         "triple-triad": "Triple Triad",
@@ -102,7 +146,18 @@
         "type-descend": "Malus",
         "swap": "Tauschen",
         "roulette": "Zufällig",
-        "draft": "Improvisation"
+        "draft": "Improvisation",
+        "home": "Startseite",
+        "repository": "Repositorys",
+        "restart": "Neu starten",
+        "current-rules": "Aktuelle Regeln",
+        "reset": "Zurücksetzen",
+        "blue-turn": "Blau am Zug",
+        "red-turn": "Rot am Zug",
+        "combo": "Kombo",
+        "blue-wins": "Blau gewinnt",
+        "red-wins": "Rot gewinnt",
+        "draw": "Unentschieden"
     },
     "ko": {
         "triple-triad": "트리플 트라이어드",
@@ -123,6 +178,17 @@
         "type-descend": "유형 약화",
         "swap": "카드 교환",
         "roulette": "무작위 규칙",
-        "draft": "드래프트"
+        "draft": "드래프트",
+        "home": "홈",
+        "repository": "저장소",
+        "restart": "재시작",
+        "current-rules": "현재 규칙",
+        "reset": "재설정",
+        "blue-turn": "파란 카드 차례",
+        "red-turn": "빨간 카드 차례",
+        "combo": "콤보",
+        "blue-wins": "파란 카드 승리",
+        "red-wins": "빨간 카드 승리",
+        "draw": "무승부"
     }
 }

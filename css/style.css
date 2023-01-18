@@ -47,6 +47,26 @@ body {
     background-position: center center;
 }
 
+.player-cell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #6565e080;
+}
+
+.computer-cell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f2896d80;
+}
+
 .player-hand,
 .computer-hand {
     /* width: 25%; */
@@ -131,9 +151,9 @@ body {
     .container {
         flex-direction: column;
         top: 3%;
-        bottom: 3%;
-        left: 7%;
-        right: 7%;
+        bottom: 1%;
+        left: 3%;
+        right: 3%;
     }
     .board {
         height: 100vw;
@@ -162,8 +182,9 @@ body {
     }
 }
 
-/* 卡牌在 .cell 中居中显示 */
-.cell .card-tooltip {
+/* 卡牌居中显示 */
+.cell .card-tooltip,
+.card-container.card-tooltip {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -370,5 +391,38 @@ input[type='checkbox'] {
 
     .rule-label a {
         float: right;
+    }
+}
+
+/* 卡面响应式设计 */
+@media screen and (max-width: 768px) {
+    .player-card,
+    .computer-card,
+    .outcard,
+    .cardback {
+        width: 78px;
+        height: 96px;
+        background-size: 100% 100%;
+        background-position: center center;
+    }
+
+    .card-tooltip,
+    .card-img img {
+        width: 78px;
+        height: 96px;
+    }
+
+    .card-rarity {
+        left: 4px;
+        top: 3px;
+    }
+
+    .card-type {
+        top: 2px;
+        right: 3px;
+    }
+
+    .card-number {
+        left: 18px;
     }
 }

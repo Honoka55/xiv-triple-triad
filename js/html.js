@@ -200,6 +200,7 @@ function displayCard(card, index) {
     cardDiv.innerHTML = ``;
     cardDiv.classList.remove('cardback');
     cardDiv.classList.add('outcard');
+    cellDiv.classList.add(card.owner + '-cell');
 }
 
 // 清空游戏
