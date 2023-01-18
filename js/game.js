@@ -79,10 +79,16 @@ class Game {
         }
         this.handleOpenRules();
         setTimeout(() => {
-            this.handleSwapRule();
-            setTimeout(() => {
+            if (this.rules.includes('swap')) {
+                this.handleSwapRule();
+                if (this.rules.includes('reverse')) {
+                    setTimeout(() => {
+                        this.handleReverseRule();
+                    }, 2500);
+                }
+            } else {
                 this.handleReverseRule();
-            }, 2500);
+            }
             setTimeout(() => {
                 // 随机指定先手
                 var randomArr = Array.from({ length: 3 }, () => Math.round(Math.random()));
@@ -250,8 +256,11 @@ class Game {
                 this.board.grid[index + 1].owner = this.turn;
             }
         }
-        // 更新棋盘视图
-        this.board.updateView();
+
+        setTimeout(() => {
+            // 更新棋盘视图
+            this.board.updateView();
+        }, this.handleAceKillerRule());
     }
 
     checkGameOver() {
@@ -342,5 +351,9 @@ class Game {
             card.right = 11 - card.right;
         });
         showMaskedMessage('逆转');
+    }
+
+    handleAceKillerRule() {
+        return 0;
     }
 }
