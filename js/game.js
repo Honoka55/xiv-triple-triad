@@ -260,7 +260,7 @@ class Game {
         setTimeout(() => {
             // 更新棋盘视图
             this.board.updateView();
-        }, this.handleAceKillerRule());
+        }, this.handleAceKillerRule(index));
     }
 
     checkGameOver() {
@@ -338,6 +338,9 @@ class Game {
 
     handleReverseRule() {
         // 处理逆转规则
+        if (!this.rules.includes('reverse')) {
+            return;
+        }
         this.playerHand.forEach((card) => {
             card.up = 11 - card.up;
             card.bottom = 11 - card.bottom;
@@ -353,7 +356,8 @@ class Game {
         showMaskedMessage('逆转');
     }
 
-    handleAceKillerRule() {
+    handleAceKillerRule(index) {
+        // 处理王牌杀手规则
         return 0;
     }
 }
