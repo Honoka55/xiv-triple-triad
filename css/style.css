@@ -152,8 +152,8 @@ body {
         flex-direction: column;
         top: 3%;
         bottom: 1%;
-        left: 3%;
-        right: 3%;
+        left: 0.2%;
+        right: 0.2%;
     }
     .board {
         height: 100vw;
@@ -179,6 +179,7 @@ body {
     .player-hand .card-container,
     .computer-hand .card-container {
         flex-basis: calc(20% - 10px);
+        margin: 0.2%;
     }
 }
 
