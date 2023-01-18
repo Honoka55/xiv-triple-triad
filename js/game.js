@@ -81,6 +81,9 @@ class Game {
         setTimeout(() => {
             this.handleSwapRule();
             setTimeout(() => {
+                this.handleReverseRule();
+            }, 2500);
+            setTimeout(() => {
                 // 随机指定先手
                 var randomArr = Array.from({ length: 3 }, () => Math.round(Math.random()));
                 let show = '开始！';
@@ -322,5 +325,22 @@ class Game {
         setTimeout(() => {
             showSwapCards(playerIndex, computerIndex);
         }, 1200);
+    }
+
+    handleReverseRule() {
+        // 处理逆转规则
+        this.playerHand.forEach((card) => {
+            card.up = 11 - card.up;
+            card.bottom = 11 - card.bottom;
+            card.left = 11 - card.left;
+            card.right = 11 - card.right;
+        });
+        this.computerHand.forEach((card) => {
+            card.up = 11 - card.up;
+            card.bottom = 11 - card.bottom;
+            card.left = 11 - card.left;
+            card.right = 11 - card.right;
+        });
+        showMaskedMessage('逆转');
     }
 }

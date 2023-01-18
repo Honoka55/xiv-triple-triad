@@ -48,7 +48,7 @@ function showRuleSelect() {
                 </div>
                 <div>
                     <input type="checkbox" id="reverse" value="reverse">
-                    <label for="reverse">逆转</label>
+                    <label for="reverse">逆转<sup style="color:red">NEW!</sup></label>
                 </div>
                 <div>
                     <input type="checkbox" id="ace-killer" value="ace-killer">
@@ -124,7 +124,7 @@ function showRuleSelect() {
 
     // 禁用还未实现的规则
     rules.forEach((rule) => {
-        if (!['all-open', 'three-open', 'swap'].includes(rule.id)) {
+        if (!['all-open', 'three-open', 'swap', 'reverse'].includes(rule.id)) {
             rule.disabled = true;
         }
     });
