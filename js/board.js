@@ -7,6 +7,9 @@ class Board {
         // 重置棋盘
         this.grid = Array(9).fill(null);
         for (let i = 0; i < 9; i++) {
+            let cellDiv = cells[i];
+            cellDiv.classList.remove('player-cell');
+            cellDiv.classList.remove('computer-cell');
             this.grid[i] = new Cell();
         }
         clearGame();
