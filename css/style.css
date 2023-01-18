@@ -363,14 +363,22 @@ input[type='checkbox'] {
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     border-radius: 10px;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.rule-text {
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-grow: 1;
 }
 
 .rule-label a {
     color: white;
     text-decoration: none;
+    white-space: nowrap;
+    margin-left: 10px;
 }
 
 .rule-label a:hover {

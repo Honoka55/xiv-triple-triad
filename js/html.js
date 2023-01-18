@@ -52,7 +52,7 @@ function showRuleSelect() {
                 </div>
                 <div>
                     <input type="checkbox" id="ace-killer" value="ace-killer">
-                    <label for="ace-killer">王牌杀手</label>
+                    <label for="ace-killer">王牌杀手<sup style="color:red">NEW!</sup></label>
                 </div>
                 <div>
                     <input type="checkbox" id="type-ascend" value="type-ascend">
@@ -124,7 +124,7 @@ function showRuleSelect() {
 
     // 禁用还未实现的规则
     rules.forEach((rule) => {
-        if (!['all-open', 'three-open', 'swap', 'reverse'].includes(rule.id)) {
+        if (!['all-open', 'three-open', 'swap', 'reverse', 'ace-killer'].includes(rule.id)) {
             rule.disabled = true;
         }
     });
@@ -288,7 +288,7 @@ function showStringWithButton(message, callback) {
 function displayRules(rules) {
     let ruleDiv = document.createElement('div');
     ruleDiv.classList.add('rule-label');
-    ruleDiv.innerHTML = '当前规则：' + rules.join('、') + ' <a href="javascript:location.reload();">重设</a>';
+    ruleDiv.innerHTML = '<div class="rule-text">当前规则：' + rules.join('、') + '</div><a href="javascript:location.reload();">重设</a>';
     document.body.appendChild(ruleDiv);
 }
 

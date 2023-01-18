@@ -358,6 +358,47 @@ class Game {
 
     handleAceKillerRule(index) {
         // 处理王牌杀手规则
-        return 0;
+        if (!this.rules.includes('ace-killer')) {
+            return 0;
+        }
+        let currentCard = this.board.grid[index].card;
+        let opponent = this.turn === 'player' ? 'computer' : 'player';
+        let delay = 0;
+        // 检查上方格子
+        if (index > 2 && this.board.grid[index - 3].card && this.board.grid[index - 3].owner === opponent) {
+            let opponentCard = this.board.grid[index - 3].card;
+            if (opponentCard.bottom == 10 && currentCard.up == 1) {
+                this.board.grid[index - 3].owner = this.turn;
+                delay = 1500;
+            }
+        }
+        // 检查下方格子
+        if (index < 6 && this.board.grid[index + 3].card && this.board.grid[index + 3].owner === opponent) {
+            let opponentCard = this.board.grid[index + 3].card;
+            if (opponentCard.up == 10 && currentCard.bottom == 1) {
+                this.board.grid[index + 3].owner = this.turn;
+                delay = 1500;
+            }
+        }
+        // 检查左边格子
+        if (index % 3 !== 0 && this.board.grid[index - 1].card && this.board.grid[index - 1].owner === opponent) {
+            let opponentCard = this.board.grid[index - 1].card;
+            if (opponentCard.right == 10 && currentCard.left == 1) {
+                this.board.grid[index - 1].owner = this.turn;
+                delay = 1500;
+            }
+        }
+        // 检查右边格子
+        if (index % 3 !== 2 && this.board.grid[index + 1].card && this.board.grid[index + 1].owner === opponent) {
+            let opponentCard = this.board.grid[index + 1].card;
+            if (opponentCard.left == 10 && currentCard.right == 1) {
+                this.board.grid[index + 1].owner = this.turn;
+                delay = 1500;
+            }
+        }
+        if (delay) {
+            showMaskedMessage('王牌杀手');
+        }
+        return delay;
     }
 }
