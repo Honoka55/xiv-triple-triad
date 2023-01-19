@@ -333,6 +333,7 @@ class Game {
     restart() {
         // 重设棋盘
         this.board.reset();
+        document.getElementsByClassName('rule-label')[0].remove();
         this.gameOver = false;
         this.start();
     }
