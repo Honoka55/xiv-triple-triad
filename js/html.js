@@ -40,19 +40,19 @@ function showRuleSelect() {
                 </div>
                 <div>
                     <input type="checkbox" id="order" value="order">
-                    <label for="order">秩序</label>
+                    <label for="order">秩序<sup style="color:red">NEW!</sup></label>
                 </div>
                 <div>
                     <input type="checkbox" id="chaos" value="chaos">
-                    <label for="chaos">混乱</label>
+                    <label for="chaos">混乱<sup style="color:red">NEW!</sup></label>
                 </div>
                 <div>
                     <input type="checkbox" id="reverse" value="reverse">
-                    <label for="reverse">逆转<sup style="color:red">NEW!</sup></label>
+                    <label for="reverse">逆转</label>
                 </div>
                 <div>
                     <input type="checkbox" id="ace-killer" value="ace-killer">
-                    <label for="ace-killer">王牌杀手<sup style="color:red">NEW!</sup></label>
+                    <label for="ace-killer">王牌杀手</label>
                 </div>
                 <div>
                     <input type="checkbox" id="type-ascend" value="type-ascend">
@@ -86,6 +86,8 @@ function showRuleSelect() {
         'draft': ['random-hand'],
         'all-open': ['three-open'],
         'three-open': ['all-open'],
+        'order': ['chaos'],
+        'chaos': ['order'],
         'roulette': ['all-open', 'three-open', 'same', 'sudden-death', 'plus', 'order', 'chaos', 'reverse', 'ace-killer', 'type-ascend', 'type-descend', 'swap']
     };
     const rules = document.querySelectorAll('.rules-content input[type="checkbox"]');
@@ -124,7 +126,7 @@ function showRuleSelect() {
 
     // 禁用还未实现的规则
     rules.forEach((rule) => {
-        if (!['all-open', 'three-open', 'swap', 'reverse', 'ace-killer'].includes(rule.id)) {
+        if (!['all-open', 'three-open', 'swap', 'reverse', 'ace-killer', 'order', 'chaos'].includes(rule.id)) {
             rule.disabled = true;
         }
     });

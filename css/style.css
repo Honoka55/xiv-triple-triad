@@ -110,6 +110,10 @@ body {
     background: url('https://gcore.jsdelivr.net/gh/Honoka55/xiv-triple-triad/img/back/outcard.png') no-repeat center;
 }
 
+.disable-card {
+    filter: brightness(60%);
+}
+
 .cardback {
     width: 104px;
     height: 128px;
@@ -365,6 +369,7 @@ input[type='checkbox'] {
     border-radius: 10px;
     display: flex;
     align-items: center;
+    z-index: 99;
 }
 
 .rule-text {

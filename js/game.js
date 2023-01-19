@@ -5,6 +5,9 @@ class Game {
         this.playerHand = [];
         this.computerHand = [];
         this.turn = null;
+        this.turnIndex = 0;
+        this.playerHandOrder = [];
+        this.computerHandOrder = [];
         this.gameOver = false;
     }
 
@@ -79,15 +82,20 @@ class Game {
         }
         this.handleOpenRules();
         setTimeout(() => {
+            let rulesToHandle = [];
             if (this.rules.includes('swap')) {
-                this.handleSwapRule();
-                if (this.rules.includes('reverse')) {
-                    setTimeout(() => {
-                        this.handleReverseRule();
-                    }, 2500);
-                }
-            } else {
-                this.handleReverseRule();
+                rulesToHandle.push(() => this.handleSwapRule());
+            }
+            if (this.rules.includes('reverse')) {
+                rulesToHandle.push(() => this.handleReverseRule());
+            }
+            if (this.rules.includes('order') || this.rules.includes('chaos')) {
+                rulesToHandle.push(() => this.handleOrderAndChaosRules());
+            }
+            for (let i = 0; i < rulesToHandle.length; i++) {
+                setTimeout(() => {
+                    rulesToHandle[i]();
+                }, 2500 * i);
             }
             setTimeout(() => {
                 // 随机指定先手
@@ -125,6 +133,14 @@ class Game {
         }
         let selectedCard;
         let selectedCell;
+        // 秩序与混乱规则下禁用非当前卡牌
+        if (this.playerHandOrder.length) {
+            for (let i = 0; i < 5; i++) {
+                if (i !== this.playerHandOrder[Math.floor(this.turnIndex / 2)]) {
+                    document.getElementById('player-card-' + i).classList.add('disable-card');
+                }
+            }
+        }
         // 给玩家手牌区的卡牌添加点击事件监听
         let gameClickHandler = (event) => {
             if (document.getElementsByClassName('selected')[0]) {
@@ -139,7 +155,7 @@ class Game {
                 cells[i].removeEventListener('click', gameClickHandler);
             }
             // 如果合法就放置卡牌
-            console.log('you placed Card#' + selectedCard + ' at Cell#' + selectedCell);
+            console.log(this.turnIndex + ': You placed Card#' + selectedCard + ' at Cell#' + selectedCell);
             this.board.placeCard(selectedCell, this.playerHand[selectedCard]);
             this.playerHand[selectedCard] = null;
             // 检查是否有卡牌被翻转
@@ -147,9 +163,14 @@ class Game {
             this.checkGameOver();
             // 进入电脑回合
             if (!this.gameOver) {
+                this.turnIndex++;
                 this.turn = 'computer';
                 setTimeout(() => {
                     showMaskedMessage('红方出牌');
+                    // 还原被禁用的卡牌
+                    for (let i = 0; i < 5; i++) {
+                        document.getElementById('player-card-' + i).classList.remove('disable-card');
+                    }
                     setTimeout(() => {
                         this.computerTurn();
                     }, 2800);
@@ -172,12 +193,21 @@ class Game {
             if (cardDiv.dataset) {
                 selectedCard = parseInt(cardDiv.dataset.cardId);
                 // 如果点击的是手牌区中的卡牌就标记为已选择
-                if (Number.isInteger(selectedCard) && !document.getElementById('player-card-' + selectedCard).classList.contains('outcard')) {
+                if (
+                    Number.isInteger(selectedCard) &&
+                    !document.getElementById('player-card-' + selectedCard).classList.contains('outcard') &&
+                    !document.getElementById('player-card-' + selectedCard).classList.contains('disable-card')
+                ) {
                     cardDiv.classList.add('selected');
                     for (let i = 0; i < 9; i++) {
                         if (this.board.grid[i].card == null) {
                             cells[i].addEventListener('click', gameClickHandler);
                         }
+                    }
+                } else {
+                    // 移除棋盘格子的点击事件监听
+                    for (let i = 0; i < cells.length; i++) {
+                        cells[i].removeEventListener('click', gameClickHandler);
                     }
                 }
             } else {
@@ -200,13 +230,18 @@ class Game {
         do {
             selectedCell = Math.floor(Math.random() * 9);
         } while (this.board.grid[selectedCell].card !== null);
-        // 随机选择一张电脑手牌
+        // 秩序与混乱规则下按指定顺序出牌
         let selectedCard;
-        do {
-            selectedCard = Math.floor(Math.random() * 5);
-        } while (this.computerHand[selectedCard] === null);
+        if (this.computerHandOrder.length) {
+            selectedCard = this.computerHandOrder[Math.floor(this.turnIndex / 2)];
+        } else {
+            // 随机选择一张电脑手牌
+            do {
+                selectedCard = Math.floor(Math.random() * 5);
+            } while (this.computerHand[selectedCard] === null);
+        }
         // 放置卡牌
-        console.log('computer placed Card#' + selectedCard + ' at Cell#' + selectedCell);
+        console.log(this.turnIndex + ': Computer placed Card#' + selectedCard + ' at Cell#' + selectedCell);
         document.getElementById('computer-card-' + selectedCard).classList.add('selected');
         setTimeout(() => {
             this.board.placeCard(selectedCell, this.computerHand[selectedCard]);
@@ -216,6 +251,7 @@ class Game {
             this.checkGameOver();
             // 进入玩家回合
             if (!this.gameOver) {
+                this.turnIndex++;
                 this.turn = 'player';
                 setTimeout(() => {
                     showMaskedMessage('蓝方出牌');
@@ -401,4 +437,30 @@ class Game {
         }
         return delay;
     }
+
+    handleOrderAndChaosRules() {
+        // 处理秩序和混乱规则
+        let playerOrder = [0, 1, 2, 3, 4],
+            computerOrder = [0, 1, 2, 3, 4];
+        if (this.rules.includes('order')) {
+            showMaskedMessage('秩序');
+        } else if (this.rules.includes('chaos')) {
+            showMaskedMessage('混乱');
+            shuffle(playerOrder);
+            shuffle(computerOrder);
+        } else {
+            return;
+        }
+        this.playerHandOrder = playerOrder;
+        this.computerHandOrder = computerOrder;
+    }
+}
+
+// 函数用来打乱数组
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
