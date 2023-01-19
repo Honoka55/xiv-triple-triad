@@ -12,71 +12,79 @@ function showRuleSelect() {
     let overlay = document.getElementsByClassName('rules-overlay')[0];
     overlay.innerHTML = `
         <div class="rules-modal">
-            <div class="rules-title">选择规则</div>
+            <div class="rules-title" data-i18n="rules-title"></div>
             <div class="rules-content">
                 <div>
                     <input type="checkbox" id="all-open" value="all-open">
-                    <label for="all-open">全明牌</label>
+                    <label for="all-open" data-i18n="all-open"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="three-open" value="three-open">
-                    <label for="three-open">三明牌</label>
+                    <label for="three-open" data-i18n="three-open"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="same" value="same">
-                    <label for="same">同数</label>
+                    <label for="same" data-i18n="same"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="sudden-death" value="sudden-death">
-                    <label for="sudden-death">不胜不休</label>
+                    <label for="sudden-death" data-i18n="sudden-death"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="plus" value="plus">
-                    <label for="plus">加算</label>
+                    <label for="plus" data-i18n="plus"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="random-hand" value="random-hand" checked>
-                    <label for="random-hand">随机</label>
+                    <label for="random-hand" data-i18n="random-hand"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="order" value="order">
-                    <label for="order">秩序<sup style="color:red">NEW!</sup></label>
+                    <label for="order" data-i18n="order"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="chaos" value="chaos">
-                    <label for="chaos">混乱<sup style="color:red">NEW!</sup></label>
+                    <label for="chaos" data-i18n="chaos"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="reverse" value="reverse">
-                    <label for="reverse">逆转</label>
+                    <label for="reverse" data-i18n="reverse"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="ace-killer" value="ace-killer">
-                    <label for="ace-killer">王牌杀手</label>
+                    <label for="ace-killer" data-i18n="ace-killer"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="type-ascend" value="type-ascend">
-                    <label for="type-ascend">同类强化</label>
+                    <label for="type-ascend" data-i18n="type-ascend"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="type-descend" value="type-descend">
-                    <label for="type-descend">同类弱化</label>
+                    <label for="type-descend" data-i18n="type-descend"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="swap" value="swap">
-                    <label for="swap">交换</label>
+                    <label for="swap" data-i18n="swap"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="draft" value="draft">
-                    <label for="draft">选拔</label>
+                    <label for="draft" data-i18n="draft"></label>
                 </div>
                 <div>
                     <input type="checkbox" id="roulette" value="roulette">
-                    <label for="roulette">天选</label>
+                    <label for="roulette" data-i18n="roulette"></label>
                 </div>
             </div>
-            <button id="start-btn" type="button">开始</button>
+            <button id="start-btn" type="button" data-i18n="start-button"></button>
             <p class="copyright-text">[FFXIV Materials] <wbr>Copyright © 2010-2023 SQUARE ENIX CO., LTD. All Rights Reserved.</p>
+            <select id="language-select" onchange="i18n.setLanguage(this.value); i18n.translate();">
+                <option value="zh">中文</option>
+                <option value="ja">日本語</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="ko">한국어</option>
+            </select>
         </div>
     `;
 
@@ -263,7 +271,7 @@ function showStringWithButton(message, callback) {
 
     // create first button
     let firstButton = document.createElement('button');
-    firstButton.innerText = 'Restart';
+    firstButton.innerText = i18n.getText('restart');
     firstButton.addEventListener('click', () => {
         callback();
         overlay.remove();
@@ -272,7 +280,7 @@ function showStringWithButton(message, callback) {
 
     // create second button
     let secondButton = document.createElement('button');
-    secondButton.innerText = 'Home';
+    secondButton.innerText = i18n.getText('home');
     secondButton.addEventListener('click', () => {
         window.location.href = 'https://honoka55.github.io';
     });
@@ -280,7 +288,7 @@ function showStringWithButton(message, callback) {
 
     // create third button
     let thirdButton = document.createElement('button');
-    thirdButton.innerText = 'Repo';
+    thirdButton.innerText = i18n.getText('repository');
     thirdButton.addEventListener('click', () => {
         window.location.href = 'https://github.com/Honoka55/xiv-triple-triad';
     });
@@ -290,7 +298,8 @@ function showStringWithButton(message, callback) {
 function displayRules(rules) {
     let ruleDiv = document.createElement('div');
     ruleDiv.classList.add('rule-label');
-    ruleDiv.innerHTML = '<div class="rule-text">当前规则：' + rules.join('、') + '</div><a href="javascript:location.reload();">重设</a>';
+    ruleDiv.innerHTML = `<div class="rule-text">${i18n.getText('current-rules')}${rules.map((r) => i18n.getText(r)).join(i18n.getText('delimiter'))}</div>
+        <a href="javascript:location.reload();">${i18n.getText('reset')}</a>`;
     document.body.appendChild(ruleDiv);
 }
 

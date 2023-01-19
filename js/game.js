@@ -100,23 +100,23 @@ class Game {
             setTimeout(() => {
                 // 随机指定先手
                 var randomArr = Array.from({ length: 3 }, () => Math.round(Math.random()));
-                let show = '开始！';
+                let show = i18n.getText('game-start');
                 for (var i = 0; i < randomArr.length; i++) {
                     if (randomArr[i] === 0) {
-                        show = show + '蓝';
+                        show = show + '🟦';
                     } else {
-                        show = show + '红';
+                        show = show + '🟥';
                     }
                 }
                 showMaskedMessage(show);
                 setTimeout(() => {
                     if (randomArr.filter((x) => x === 0).length > randomArr.filter((x) => x === 1).length) {
                         this.turn = 'player';
-                        showMaskedMessage('蓝方出牌');
+                        showMaskedMessage(i18n.getText('blue-turn'));
                         this.play();
                     } else {
                         this.turn = 'computer';
-                        showMaskedMessage('红方出牌');
+                        showMaskedMessage(i18n.getText('red-turn'));
                         setTimeout(() => {
                             this.computerTurn();
                         }, 2800);
@@ -166,7 +166,7 @@ class Game {
                 this.turnIndex++;
                 this.turn = 'computer';
                 setTimeout(() => {
-                    showMaskedMessage('红方出牌');
+                    showMaskedMessage(i18n.getText('red-turn'));
                     // 还原被禁用的卡牌
                     for (let i = 0; i < 5; i++) {
                         document.getElementById('player-card-' + i).classList.remove('disable-card');
@@ -254,7 +254,7 @@ class Game {
                 this.turnIndex++;
                 this.turn = 'player';
                 setTimeout(() => {
-                    showMaskedMessage('蓝方出牌');
+                    showMaskedMessage(i18n.getText('blue-turn'));
                     this.play();
                 }, 700);
             }
@@ -316,13 +316,13 @@ class Game {
         // 判定胜负
         if (playerScore > computerScore) {
             console.log('You won!');
-            win = '蓝方胜利';
+            win = i18n.getText('blue-wins');
         } else if (playerScore < computerScore) {
             console.log('You lost!');
-            win = '红方胜利';
+            win = i18n.getText('red-wins');
         } else {
-            console.log("It's a tie!");
-            win = '不分胜负';
+            console.log("It's a draw!");
+            win = i18n.getText('draw');
         }
         this.gameOver = true;
         showStringWithButton(win, () => {
@@ -342,10 +342,10 @@ class Game {
         displayCards(this.playerHand, 'player', 5);
         if (this.rules.includes('all-open')) {
             displayCards(this.computerHand, 'computer', 5);
-            showMaskedMessage('全明牌');
+            showMaskedMessage(i18n.getText('all-open'));
         } else if (this.rules.includes('three-open')) {
             displayCards(this.computerHand, 'computer', 3);
-            showMaskedMessage('三明牌');
+            showMaskedMessage(i18n.getText('three-open'));
         } else {
             displayCards(this.computerHand, 'computer', 0);
         }
@@ -366,7 +366,7 @@ class Game {
         this.playerHand[playerIndex].num = playerIndex;
         this.computerHand[computerIndex].num = computerIndex + 5;
         // 更新界面显示
-        showMaskedMessage('交换');
+        showMaskedMessage(i18n.getText('swap'));
         setTimeout(() => {
             showSwapCards(playerIndex, computerIndex);
         }, 1200);
@@ -389,7 +389,7 @@ class Game {
             card.left = 11 - card.left;
             card.right = 11 - card.right;
         });
-        showMaskedMessage('逆转');
+        showMaskedMessage(i18n.getText('reverse'));
     }
 
     handleAceKillerRule(index) {
@@ -433,7 +433,7 @@ class Game {
             }
         }
         if (delay) {
-            showMaskedMessage('王牌杀手');
+            showMaskedMessage(i18n.getText('ace-killer'));
         }
         return delay;
     }
@@ -443,9 +443,9 @@ class Game {
         let playerOrder = [0, 1, 2, 3, 4],
             computerOrder = [0, 1, 2, 3, 4];
         if (this.rules.includes('order')) {
-            showMaskedMessage('秩序');
+            showMaskedMessage(i18n.getText('order'));
         } else if (this.rules.includes('chaos')) {
-            showMaskedMessage('混乱');
+            showMaskedMessage(i18n.getText('chaos'));
             shuffle(playerOrder);
             shuffle(computerOrder);
         } else {

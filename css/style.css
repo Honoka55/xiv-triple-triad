@@ -356,7 +356,13 @@ input[type='checkbox'] {
     margin-top: 20px;
     width: 60%;
     text-align: center;
-    display: block;
+}
+
+#language-select {
+    border-radius: 0.4em;
+    font-size: 1.2em;
+    text-align: center;
+    align-self: flex-end;
 }
 
 .rule-label {
