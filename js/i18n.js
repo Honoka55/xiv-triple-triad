@@ -31,7 +31,7 @@ const i18n = {
 };
 
 // 调用
-fetch('/data/i18n.json')
+fetch('/xiv-triple-triad/data/i18n.json')
     .then((response) => response.json())
     .then((data) => {
         i18n.setData(data);
