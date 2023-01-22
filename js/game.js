@@ -23,6 +23,37 @@ class Game {
             if (this.rules.includes('random-hand')) {
                 this.handleRandomHandRule(cards);
             }
+            let rare4or5Counter = 0;
+            let rare5Counter = 0;
+            while (this.computerHand.length < 5) {
+                let randomIndex = Math.floor(Math.random() * cards.length);
+                let selectedCard = cards[randomIndex];
+                if (selectedCard.稀有度 === 4 || selectedCard.稀有度 === 5) {
+                    if (rare4or5Counter >= 2) {
+                        continue;
+                    }
+                    if (selectedCard.稀有度 === 5) {
+                        if (rare5Counter >= 1) {
+                            continue;
+                        }
+                        rare5Counter++;
+                    }
+                    rare4or5Counter++;
+                }
+                let card = new Card(
+                    selectedCard.上,
+                    selectedCard.下,
+                    selectedCard.左,
+                    selectedCard.右,
+                    selectedCard.中文名,
+                    selectedCard.稀有度,
+                    selectedCard.类型ID,
+                    selectedCard.卡面,
+                    this.computerHand.length + 5
+                );
+                this.computerHand.push(card);
+                cards.splice(randomIndex, 1);
+            }
         }
         this.handleOpenRules();
         setTimeout(() => {
@@ -324,37 +355,6 @@ class Game {
                 this.playerHand.length
             );
             this.playerHand.push(card);
-            cards.splice(randomIndex, 1);
-        }
-        rare4or5Counter = 0;
-        rare5Counter = 0;
-        while (this.computerHand.length < 5) {
-            let randomIndex = Math.floor(Math.random() * cards.length);
-            let selectedCard = cards[randomIndex];
-            if (selectedCard.稀有度 === 4 || selectedCard.稀有度 === 5) {
-                if (rare4or5Counter >= 2) {
-                    continue;
-                }
-                if (selectedCard.稀有度 === 5) {
-                    if (rare5Counter >= 1) {
-                        continue;
-                    }
-                    rare5Counter++;
-                }
-                rare4or5Counter++;
-            }
-            let card = new Card(
-                selectedCard.上,
-                selectedCard.下,
-                selectedCard.左,
-                selectedCard.右,
-                selectedCard.中文名,
-                selectedCard.稀有度,
-                selectedCard.类型ID,
-                selectedCard.卡面,
-                this.computerHand.length + 5
-            );
-            this.computerHand.push(card);
             cards.splice(randomIndex, 1);
         }
     }
