@@ -446,3 +446,26 @@ input[type='checkbox'] {
         left: 18px;
     }
 }
+
+/* 强化与弱化的牌面数字 */
+.ascend::after {
+    content: '+' attr(data-increment);
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 10px blue;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.descend::after {
+    content: attr(data-increment);
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 10px red;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

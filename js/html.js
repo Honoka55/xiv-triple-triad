@@ -96,6 +96,8 @@ function showRuleSelect() {
         'three-open': ['all-open'],
         'order': ['chaos'],
         'chaos': ['order'],
+        'type-ascend': ['type-descend'],
+        'type-descend': ['type-ascend'],
         'roulette': ['all-open', 'three-open', 'same', 'sudden-death', 'plus', 'order', 'chaos', 'reverse', 'ace-killer', 'type-ascend', 'type-descend', 'swap']
     };
     const rules = document.querySelectorAll('.rules-content input[type="checkbox"]');
@@ -134,7 +136,7 @@ function showRuleSelect() {
 
     // 禁用还未实现的规则
     rules.forEach((rule) => {
-        if (!['all-open', 'three-open', 'swap', 'reverse', 'ace-killer', 'order', 'chaos', 'sudden-death'].includes(rule.id)) {
+        if (['same', 'plus', 'random-hand', 'draft', 'roulette'].includes(rule.id)) {
             rule.disabled = true;
         }
     });

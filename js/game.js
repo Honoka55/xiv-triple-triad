@@ -135,22 +135,24 @@ class Game {
             this.playerHand[selectedCard] = null;
             // 检查是否有卡牌被翻转
             this.checkCapture(selectedCell);
-            this.checkGameOver();
-            // 进入电脑回合
-            if (!this.gameOver) {
-                this.turnIndex++;
-                this.turn = 'computer';
-                setTimeout(() => {
-                    showMaskedMessage(i18n.getText('red-turn'));
-                    // 还原被禁用的卡牌
-                    for (let i = 0; i < 5; i++) {
-                        document.getElementById('player-card-' + i).classList.remove('disable-card');
-                    }
+            setTimeout(() => {
+                this.checkGameOver();
+                // 进入电脑回合
+                if (!this.gameOver) {
+                    this.turnIndex++;
+                    this.turn = 'computer';
                     setTimeout(() => {
-                        this.computerTurn();
-                    }, 2800);
-                }, 700);
-            }
+                        showMaskedMessage(i18n.getText('red-turn'));
+                        // 还原被禁用的卡牌
+                        for (let i = 0; i < 5; i++) {
+                            document.getElementById('player-card-' + i).classList.remove('disable-card');
+                        }
+                        setTimeout(() => {
+                            this.computerTurn();
+                        }, 2800);
+                    }, 700);
+                }
+            }, this.handleTypeAscendAndDescendRules(this.board.grid[selectedCell].card));
         };
         let playerHandClickHandler = (event) => {
             // 找到.card-container父元素
@@ -223,16 +225,18 @@ class Game {
             document.getElementsByClassName('selected')[0].classList.remove('selected');
             this.computerHand[selectedCard] = null;
             this.checkCapture(selectedCell);
-            this.checkGameOver();
-            // 进入玩家回合
-            if (!this.gameOver) {
-                this.turnIndex++;
-                this.turn = 'player';
-                setTimeout(() => {
-                    showMaskedMessage(i18n.getText('blue-turn'));
-                    this.play();
-                }, 700);
-            }
+            setTimeout(() => {
+                this.checkGameOver();
+                // 进入玩家回合
+                if (!this.gameOver) {
+                    this.turnIndex++;
+                    this.turn = 'player';
+                    setTimeout(() => {
+                        showMaskedMessage(i18n.getText('blue-turn'));
+                        this.play();
+                    }, 700);
+                }
+            }, this.handleTypeAscendAndDescendRules(this.board.grid[selectedCell].card));
         }, 500);
     }
 
@@ -509,6 +513,95 @@ class Game {
             }
         }
         showMaskedMessage(i18n.getText('sudden-death'));
+        return 1500;
+    }
+
+    handleTypeAscendAndDescendRules(card) {
+        // 处理同类强化和弱化规则
+        if ((!this.rules.includes('type-ascend') && !this.rules.includes('type-descend')) || card.type == 0) {
+            return 0;
+        }
+        let type = card.type;
+        let operator = this.rules.includes('type-ascend') ? 1 : -1;
+        let reverse = this.rules.includes('reverse');
+        showMaskedMessage(i18n.getText(operator == 1 ? 'type-ascend' : 'type-descend'));
+
+        // 遍历所有卡牌，添加类
+        for (let i = 0; i < 9; i++) {
+            let currentCard = this.board.grid[i].card;
+            if (currentCard && currentCard.type === type) {
+                let cardDiv = document.getElementById(`cell-${i}`).firstElementChild;
+                if (operator === 1) {
+                    cardDiv.classList.add('ascend');
+                } else {
+                    cardDiv.classList.add('descend');
+                }
+                cardDiv.setAttribute('data-increment', (parseInt(cardDiv.getAttribute('data-increment')) || 0) + operator);
+            }
+        }
+        for (let i = 0; i < 5; i++) {
+            if (this.playerHand[i] && this.playerHand[i].type === type) {
+                let cardDiv = document.getElementById(`player-card-${i}`).firstElementChild;
+                if (operator === 1) {
+                    cardDiv.classList.add('ascend');
+                } else {
+                    cardDiv.classList.add('descend');
+                }
+                cardDiv.setAttribute('data-increment', (parseInt(cardDiv.getAttribute('data-increment')) || 0) + operator);
+            }
+        }
+        for (let i = 0; i < 5; i++) {
+            if (this.computerHand[i] && this.computerHand[i].type === type) {
+                let cardDiv = document.getElementById(`computer-card-${i}`).firstElementChild;
+                if (operator === 1) {
+                    cardDiv.classList.add('ascend');
+                } else {
+                    cardDiv.classList.add('descend');
+                }
+                cardDiv.setAttribute('data-increment', (parseInt(cardDiv.getAttribute('data-increment')) || 0) + operator);
+            }
+        }
+        // 如果逆转规则生效，将操作符反转
+        if (reverse) {
+            operator *= -1;
+        }
+        // 再次遍历所有卡牌，修改值
+        for (let i = 0; i < 9; i++) {
+            let currentCard = this.board.grid[i].card;
+            if (currentCard && currentCard.type === type) {
+                currentCard.up += operator;
+                currentCard.bottom += operator;
+                currentCard.left += operator;
+                currentCard.right += operator;
+                // 确保值不超过10或小于1
+                currentCard.up = Math.min(Math.max(currentCard.up, 1), 10);
+                currentCard.bottom = Math.min(Math.max(currentCard.bottom, 1), 10);
+                currentCard.left = Math.min(Math.max(currentCard.left, 1), 10);
+                currentCard.right = Math.min(Math.max(currentCard.right, 1), 10);
+            }
+        }
+        for (let i = 0; i < 5; i++) {
+            if (this.playerHand[i] && this.playerHand[i].type === type) {
+                this.playerHand[i].up += operator;
+                this.playerHand[i].bottom += operator;
+                this.playerHand[i].left += operator;
+                this.playerHand[i].right += operator;
+                this.playerHand[i].up = Math.min(Math.max(this.playerHand[i].up, 1), 10);
+                this.playerHand[i].bottom = Math.min(Math.max(this.playerHand[i].bottom, 1), 10);
+                this.playerHand[i].left = Math.min(Math.max(this.playerHand[i].left, 1), 10);
+                this.playerHand[i].right = Math.min(Math.max(this.playerHand[i].right, 1), 10);
+            }
+            if (this.computerHand[i] && this.computerHand[i].type === type) {
+                this.computerHand[i].up += operator;
+                this.computerHand[i].bottom += operator;
+                this.computerHand[i].left += operator;
+                this.computerHand[i].right += operator;
+                this.computerHand[i].up = Math.min(Math.max(this.computerHand[i].up, 1), 10);
+                this.computerHand[i].bottom = Math.min(Math.max(this.computerHand[i].bottom, 1), 10);
+                this.computerHand[i].left = Math.min(Math.max(this.computerHand[i].left, 1), 10);
+                this.computerHand[i].right = Math.min(Math.max(this.computerHand[i].right, 1), 10);
+            }
+        }
         return 1500;
     }
 }
