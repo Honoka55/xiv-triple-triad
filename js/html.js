@@ -134,7 +134,7 @@ function showRuleSelect() {
 
     // 禁用还未实现的规则
     rules.forEach((rule) => {
-        if (!['all-open', 'three-open', 'swap', 'reverse', 'ace-killer', 'order', 'chaos'].includes(rule.id)) {
+        if (!['all-open', 'three-open', 'swap', 'reverse', 'ace-killer', 'order', 'chaos', 'sudden-death'].includes(rule.id)) {
             rule.disabled = true;
         }
     });

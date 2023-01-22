@@ -9,76 +9,20 @@ class Game {
         this.playerHandOrder = [];
         this.computerHandOrder = [];
         this.gameOver = false;
+        this.consecutiveDraws = 0;
     }
 
     async start() {
         displayRules(this.rules);
-        // 重置游戏状态
-        this.playerHand = [];
-        this.computerHand = [];
-        // 随机分配卡牌
+        // 获取卡牌信息
         let cards = await loadCards();
-        let rare4or5Counter = 0;
-        let rare5Counter = 0;
-        while (this.playerHand.length < 5) {
-            let randomIndex = Math.floor(Math.random() * cards.length);
-            let selectedCard = cards[randomIndex];
-            if (selectedCard.稀有度 === 4 || selectedCard.稀有度 === 5) {
-                if (rare4or5Counter >= 2) {
-                    continue;
-                }
-                if (selectedCard.稀有度 === 5) {
-                    if (rare5Counter >= 1) {
-                        continue;
-                    }
-                    rare5Counter++;
-                }
-                rare4or5Counter++;
+        if (!this.rules.includes('sudden-death') || this.consecutiveDraws === 0) {
+            // 重置游戏状态
+            this.playerHand = [];
+            this.computerHand = [];
+            if (this.rules.includes('random-hand')) {
+                this.handleRandomHandRule(cards);
             }
-            let card = new Card(
-                selectedCard.上,
-                selectedCard.下,
-                selectedCard.左,
-                selectedCard.右,
-                selectedCard.中文名,
-                selectedCard.稀有度,
-                selectedCard.类型ID,
-                selectedCard.卡面,
-                this.playerHand.length
-            );
-            this.playerHand.push(card);
-            cards.splice(randomIndex, 1);
-        }
-        rare4or5Counter = 0;
-        rare5Counter = 0;
-        while (this.computerHand.length < 5) {
-            let randomIndex = Math.floor(Math.random() * cards.length);
-            let selectedCard = cards[randomIndex];
-            if (selectedCard.稀有度 === 4 || selectedCard.稀有度 === 5) {
-                if (rare4or5Counter >= 2) {
-                    continue;
-                }
-                if (selectedCard.稀有度 === 5) {
-                    if (rare5Counter >= 1) {
-                        continue;
-                    }
-                    rare5Counter++;
-                }
-                rare4or5Counter++;
-            }
-            let card = new Card(
-                selectedCard.上,
-                selectedCard.下,
-                selectedCard.左,
-                selectedCard.右,
-                selectedCard.中文名,
-                selectedCard.稀有度,
-                selectedCard.类型ID,
-                selectedCard.卡面,
-                this.computerHand.length + 5
-            );
-            this.computerHand.push(card);
-            cards.splice(randomIndex, 1);
         }
         this.handleOpenRules();
         setTimeout(() => {
@@ -313,21 +257,32 @@ class Game {
             playerScore = playerScore + 1;
         }
         let win;
+        let suddenDelay = 0;
         // 判定胜负
         if (playerScore > computerScore) {
             console.log('You won!');
             win = i18n.getText('blue-wins');
+            this.consecutiveDraws = 0;
         } else if (playerScore < computerScore) {
             console.log('You lost!');
             win = i18n.getText('red-wins');
+            this.consecutiveDraws = 0;
         } else {
             console.log("It's a draw!");
             win = i18n.getText('draw');
+            suddenDelay = this.handleSuddenDeathRule();
         }
         this.gameOver = true;
-        showStringWithButton(win, () => {
-            this.restart();
-        });
+        this.turnIndex = 0;
+        if (suddenDelay) {
+            setTimeout(() => {
+                this.restart();
+            }, suddenDelay);
+        } else {
+            showStringWithButton(win, () => {
+                this.restart();
+            });
+        }
     }
 
     restart() {
@@ -336,6 +291,72 @@ class Game {
         document.getElementsByClassName('rule-label')[0].remove();
         this.gameOver = false;
         this.start();
+    }
+
+    async handleRandomHandRule(cards) {
+        // 处理随机规则
+        let rare4or5Counter = 0;
+        let rare5Counter = 0;
+        while (this.playerHand.length < 5) {
+            let randomIndex = Math.floor(Math.random() * cards.length);
+            let selectedCard = cards[randomIndex];
+            if (selectedCard.稀有度 === 4 || selectedCard.稀有度 === 5) {
+                if (rare4or5Counter >= 2) {
+                    continue;
+                }
+                if (selectedCard.稀有度 === 5) {
+                    if (rare5Counter >= 1) {
+                        continue;
+                    }
+                    rare5Counter++;
+                }
+                rare4or5Counter++;
+            }
+            let card = new Card(
+                selectedCard.上,
+                selectedCard.下,
+                selectedCard.左,
+                selectedCard.右,
+                selectedCard.中文名,
+                selectedCard.稀有度,
+                selectedCard.类型ID,
+                selectedCard.卡面,
+                this.playerHand.length
+            );
+            this.playerHand.push(card);
+            cards.splice(randomIndex, 1);
+        }
+        rare4or5Counter = 0;
+        rare5Counter = 0;
+        while (this.computerHand.length < 5) {
+            let randomIndex = Math.floor(Math.random() * cards.length);
+            let selectedCard = cards[randomIndex];
+            if (selectedCard.稀有度 === 4 || selectedCard.稀有度 === 5) {
+                if (rare4or5Counter >= 2) {
+                    continue;
+                }
+                if (selectedCard.稀有度 === 5) {
+                    if (rare5Counter >= 1) {
+                        continue;
+                    }
+                    rare5Counter++;
+                }
+                rare4or5Counter++;
+            }
+            let card = new Card(
+                selectedCard.上,
+                selectedCard.下,
+                selectedCard.左,
+                selectedCard.右,
+                selectedCard.中文名,
+                selectedCard.稀有度,
+                selectedCard.类型ID,
+                selectedCard.卡面,
+                this.computerHand.length + 5
+            );
+            this.computerHand.push(card);
+            cards.splice(randomIndex, 1);
+        }
     }
 
     handleOpenRules() {
@@ -454,6 +475,41 @@ class Game {
         }
         this.playerHandOrder = playerOrder;
         this.computerHandOrder = computerOrder;
+    }
+
+    handleSuddenDeathRule() {
+        // 处理不胜不休规则
+        if (!this.rules.includes('sudden-death')) {
+            return 0;
+        }
+        this.consecutiveDraws++;
+        if (this.consecutiveDraws >= 5) {
+            this.consecutiveDraws = 0;
+            return 0;
+        }
+        for (let i = 0; i < 9; i++) {
+            if (this.board.grid[i].owner === 'player') {
+                for (let j = 0; j < 5; j++) {
+                    if (this.playerHand[j] === null) {
+                        this.playerHand[j] = this.board.grid[i].card;
+                        this.playerHand[j].owner = 'player';
+                        this.playerHand[j].num = j;
+                        break;
+                    }
+                }
+            } else if (this.board.grid[i].owner === 'computer') {
+                for (let j = 0; j < 5; j++) {
+                    if (this.computerHand[j] === null) {
+                        this.computerHand[j] = this.board.grid[i].card;
+                        this.computerHand[j].owner = 'computer';
+                        this.computerHand[j].num = j + 5;
+                        break;
+                    }
+                }
+            }
+        }
+        showMaskedMessage(i18n.getText('sudden-death'));
+        return 1500;
     }
 }
 
