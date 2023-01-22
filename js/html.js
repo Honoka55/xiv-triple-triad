@@ -73,6 +73,8 @@ function showRuleSelect() {
                 <div>
                     <input type="checkbox" id="roulette" value="roulette">
                     <label for="roulette" data-i18n="roulette"></label>
+                    <span id="roulette-num" style="display:none;"></span>
+                    <input type="range" id="roulette-count" min="1" max="9" value="1" style="display:none;">
                 </div>
             </div>
             <button id="start-btn" type="button" data-i18n="start-button"></button>
@@ -97,8 +99,7 @@ function showRuleSelect() {
         'order': ['chaos'],
         'chaos': ['order'],
         'type-ascend': ['type-descend'],
-        'type-descend': ['type-ascend'],
-        'roulette': ['all-open', 'three-open', 'same', 'sudden-death', 'plus', 'order', 'chaos', 'reverse', 'ace-killer', 'type-ascend', 'type-descend', 'swap']
+        'type-descend': ['type-ascend']
     };
     const rules = document.querySelectorAll('.rules-content input[type="checkbox"]');
     const startButton = document.querySelector('#start-btn');
@@ -134,9 +135,45 @@ function showRuleSelect() {
         });
     });
 
+    // 处理天选规则相关监听
+    const roulette = document.getElementById('roulette');
+    const rouletteCount = document.getElementById('roulette-count');
+    const rouletteNum = document.getElementById('roulette-num');
+    let rouletteMax = 9;
+    ['all-open', 'three-open', 'same', 'sudden-death', 'plus', 'order', 'chaos', 'reverse', 'ace-killer', 'type-ascend', 'type-descend', 'swap'].forEach((rule) => {
+        document.getElementById(rule).addEventListener('change', function () {
+            if (this.checked) {
+                rouletteMax--;
+            } else {
+                rouletteMax++;
+            }
+            rouletteCount.max = rouletteMax;
+            if (rouletteMax <= 0) {
+                roulette.checked = false;
+                roulette.disabled = true;
+                rouletteCount.style.display = 'none';
+                rouletteNum.style.display = 'none';
+                rouletteCount.value = 1;
+            } else {
+                roulette.disabled = false;
+                rouletteNum.innerHTML = '×' + rouletteCount.value;
+            }
+        });
+    });
+    roulette.addEventListener('change', function () {
+        if (this.value === 'roulette') {
+            rouletteCount.style.display = this.checked ? 'block' : 'none';
+            rouletteNum.style.display = this.checked ? 'inline' : 'none';
+            rouletteNum.innerHTML = '×' + rouletteCount.value;
+        }
+    });
+    rouletteCount.addEventListener('change', function () {
+        rouletteNum.innerHTML = '×' + this.value;
+    });
+
     // 禁用还未实现的规则
     rules.forEach((rule) => {
-        if (['same', 'plus', 'random-hand', 'draft', 'roulette'].includes(rule.id)) {
+        if (['random-hand', 'draft'].includes(rule.id)) {
             rule.disabled = true;
         }
     });
@@ -147,7 +184,14 @@ function showRuleSelect() {
             let selectedRules = [];
             let ruleElements = document.querySelectorAll('.rules-content input[type="checkbox"]:checked');
             for (let i = 0; i < ruleElements.length; i++) {
-                selectedRules.push(ruleElements[i].value);
+                if (ruleElements[i].value == 'roulette') {
+                    let rouletteCount = document.getElementById('roulette-count').value;
+                    for (let j = 0; j < rouletteCount; j++) {
+                        selectedRules.push('roulette');
+                    }
+                } else {
+                    selectedRules.push(ruleElements[i].value);
+                }
             }
             document.getElementsByClassName('container')[0].style.display = 'flex';
             overlay.remove();
