@@ -794,14 +794,14 @@ class Game {
         };
         const nonRouletteRules = this.rules.filter((rule) => rule !== 'roulette');
         const availableRules = ['all-open', 'three-open', 'same', 'sudden-death', 'plus', 'order', 'chaos', 'reverse', 'ace-killer', 'type-ascend', 'type-descend', 'swap'].filter(
-            (rule) => !nonRouletteRules.includes(rule) && (!exclusiveRules[rule] || !exclusiveRules[rule].some((exclusiveRule) => nonRouletteRules.includes(exclusiveRule)))
+            (rule) => !nonRouletteRules.includes(rule) && !exclusiveRules[rule]?.some((exclusiveRule) => nonRouletteRules.includes(exclusiveRule))
         );
         const selectedRules = new Set();
         for (let i = 0; i < this.rouletteCount; i++) {
             let newRule;
             do {
                 newRule = availableRules[Math.floor(Math.random() * availableRules.length)];
-            } while (selectedRules.has(newRule));
+            } while (selectedRules.has(newRule) || exclusiveRules[newRule]?.some((rule) => selectedRules.has(rule)));
             selectedRules.add(newRule);
         }
         this.rules = nonRouletteRules.concat(Array.from(selectedRules));
