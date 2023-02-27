@@ -10,9 +10,11 @@ class Game {
         this.computerHandOrder = [];
         this.gameOver = false;
         this.consecutiveDraws = 0;
+        this.rouletteCount = this.rules.filter((rule) => rule === 'roulette').length;
     }
 
     async start() {
+        this.handleRouletteRule();
         displayRules(this.rules);
         // 获取卡牌信息
         let cards = await loadCards();
@@ -337,6 +339,9 @@ class Game {
         this.board.reset();
         document.getElementsByClassName('rule-label')[0].remove();
         this.gameOver = false;
+        if (this.rouletteCount && !this.consecutiveDraws) {
+            this.rules.splice(-this.rouletteCount, this.rouletteCount, ...Array(this.rouletteCount).fill('roulette'));
+        }
         this.start();
     }
 
@@ -762,6 +767,36 @@ class Game {
             }, totalDelay);
         }
         return totalDelay;
+    }
+
+    handleRouletteRule() {
+        // 处理天选规则
+        if (!this.rouletteCount) {
+            return;
+        }
+        const exclusiveRules = {
+            'random-hand': ['draft'],
+            'draft': ['random-hand'],
+            'all-open': ['three-open'],
+            'three-open': ['all-open'],
+            'order': ['chaos'],
+            'chaos': ['order'],
+            'type-ascend': ['type-descend'],
+            'type-descend': ['type-ascend']
+        };
+        const nonRouletteRules = this.rules.filter((rule) => rule !== 'roulette');
+        const availableRules = ['all-open', 'three-open', 'same', 'sudden-death', 'plus', 'order', 'chaos', 'reverse', 'ace-killer', 'type-ascend', 'type-descend', 'swap'].filter(
+            (rule) => !nonRouletteRules.includes(rule) && (!exclusiveRules[rule] || !exclusiveRules[rule].some((exclusiveRule) => nonRouletteRules.includes(exclusiveRule)))
+        );
+        const selectedRules = new Set();
+        for (let i = 0; i < this.rouletteCount; i++) {
+            let newRule;
+            do {
+                newRule = availableRules[Math.floor(Math.random() * availableRules.length)];
+            } while (selectedRules.has(newRule));
+            selectedRules.add(newRule);
+        }
+        this.rules = nonRouletteRules.concat(Array.from(selectedRules));
     }
 }
 
