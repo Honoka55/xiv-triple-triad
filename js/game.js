@@ -489,6 +489,14 @@ class Game {
             showMaskedMessage(i18n.getText('order'));
         } else if (this.rules.includes('chaos')) {
             showMaskedMessage(i18n.getText('chaos'));
+            // 函数用来打乱数组
+            const shuffle = (array) => {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            };
             shuffle(playerOrder);
             shuffle(computerOrder);
         } else {
@@ -798,13 +806,4 @@ class Game {
         }
         this.rules = nonRouletteRules.concat(Array.from(selectedRules));
     }
-}
-
-// 函数用来打乱数组
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
 }
