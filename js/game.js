@@ -136,23 +136,25 @@ class Game {
             // 检查是否有卡牌被翻转
             this.checkCapture(selectedCell);
             setTimeout(() => {
-                this.checkGameOver();
-                // 进入电脑回合
-                if (!this.gameOver) {
-                    this.turnIndex++;
-                    this.turn = 'computer';
-                    setTimeout(() => {
-                        showMaskedMessage(i18n.getText('red-turn'));
-                        // 还原被禁用的卡牌
-                        for (let i = 0; i < 5; i++) {
-                            document.getElementById('player-card-' + i).classList.remove('disable-card');
-                        }
+                setTimeout(() => {
+                    this.checkGameOver();
+                    // 进入电脑回合
+                    if (!this.gameOver) {
+                        this.turnIndex++;
+                        this.turn = 'computer';
                         setTimeout(() => {
-                            this.computerTurn();
-                        }, 2800);
-                    }, 700);
-                }
-            }, this.handleTypeAscendAndDescendRules(this.board.grid[selectedCell].card));
+                            showMaskedMessage(i18n.getText('red-turn'));
+                            // 还原被禁用的卡牌
+                            for (let i = 0; i < 5; i++) {
+                                document.getElementById('player-card-' + i).classList.remove('disable-card');
+                            }
+                            setTimeout(() => {
+                                this.computerTurn();
+                            }, 2800);
+                        }, 700);
+                    }
+                }, this.handleTypeAscendAndDescendRules(this.board.grid[selectedCell].card));
+            }, this.handleSameAndPlusRules(selectedCell));
         };
         let playerHandClickHandler = (event) => {
             // 找到.card-container父元素
@@ -226,28 +228,32 @@ class Game {
             this.computerHand[selectedCard] = null;
             this.checkCapture(selectedCell);
             setTimeout(() => {
-                this.checkGameOver();
-                // 进入玩家回合
-                if (!this.gameOver) {
-                    this.turnIndex++;
-                    this.turn = 'player';
-                    setTimeout(() => {
-                        showMaskedMessage(i18n.getText('blue-turn'));
-                        this.play();
-                    }, 700);
-                }
-            }, this.handleTypeAscendAndDescendRules(this.board.grid[selectedCell].card));
+                setTimeout(() => {
+                    this.checkGameOver();
+                    // 进入玩家回合
+                    if (!this.gameOver) {
+                        this.turnIndex++;
+                        this.turn = 'player';
+                        setTimeout(() => {
+                            showMaskedMessage(i18n.getText('blue-turn'));
+                            this.play();
+                        }, 700);
+                    }
+                }, this.handleTypeAscendAndDescendRules(this.board.grid[selectedCell].card));
+            }, this.handleSameAndPlusRules(selectedCell));
         }, 500);
     }
 
     checkCapture(index) {
         let currentCard = this.board.grid[index].card;
         let opponent = this.turn === 'player' ? 'computer' : 'player';
+        let capturedCards = [];
         // 检查上方格子
         if (index > 2 && this.board.grid[index - 3].card && this.board.grid[index - 3].owner === opponent) {
             let opponentCard = this.board.grid[index - 3].card;
             if (opponentCard.bottom < currentCard.up) {
                 this.board.grid[index - 3].owner = this.turn;
+                capturedCards.push(index - 3);
             }
         }
         // 检查下方格子
@@ -255,6 +261,7 @@ class Game {
             let opponentCard = this.board.grid[index + 3].card;
             if (opponentCard.up < currentCard.bottom) {
                 this.board.grid[index + 3].owner = this.turn;
+                capturedCards.push(index + 3);
             }
         }
         // 检查左边格子
@@ -262,6 +269,7 @@ class Game {
             let opponentCard = this.board.grid[index - 1].card;
             if (opponentCard.right < currentCard.left) {
                 this.board.grid[index - 1].owner = this.turn;
+                capturedCards.push(index - 1);
             }
         }
         // 检查右边格子
@@ -269,13 +277,17 @@ class Game {
             let opponentCard = this.board.grid[index + 1].card;
             if (opponentCard.left < currentCard.right) {
                 this.board.grid[index + 1].owner = this.turn;
+                capturedCards.push(index + 1);
             }
         }
-
+        let cardsCapturedByAceKiller = this.handleAceKillerRule(index);
+        capturedCards = capturedCards.concat(cardsCapturedByAceKiller);
+        let delay = cardsCapturedByAceKiller.length ? 1500 : 0;
         setTimeout(() => {
             // 更新棋盘视图
             this.board.updateView();
-        }, this.handleAceKillerRule(index));
+        }, delay);
+        return capturedCards;
     }
 
     checkGameOver() {
@@ -421,17 +433,17 @@ class Game {
     handleAceKillerRule(index) {
         // 处理王牌杀手规则
         if (!this.rules.includes('ace-killer')) {
-            return 0;
+            return [];
         }
         let currentCard = this.board.grid[index].card;
         let opponent = this.turn === 'player' ? 'computer' : 'player';
-        let delay = 0;
+        let capturedCards = [];
         // 检查上方格子
         if (index > 2 && this.board.grid[index - 3].card && this.board.grid[index - 3].owner === opponent) {
             let opponentCard = this.board.grid[index - 3].card;
             if (opponentCard.bottom == 10 && currentCard.up == 1) {
                 this.board.grid[index - 3].owner = this.turn;
-                delay = 1500;
+                capturedCards.push(index - 3);
             }
         }
         // 检查下方格子
@@ -439,7 +451,7 @@ class Game {
             let opponentCard = this.board.grid[index + 3].card;
             if (opponentCard.up == 10 && currentCard.bottom == 1) {
                 this.board.grid[index + 3].owner = this.turn;
-                delay = 1500;
+                capturedCards.push(index + 3);
             }
         }
         // 检查左边格子
@@ -447,7 +459,7 @@ class Game {
             let opponentCard = this.board.grid[index - 1].card;
             if (opponentCard.right == 10 && currentCard.left == 1) {
                 this.board.grid[index - 1].owner = this.turn;
-                delay = 1500;
+                capturedCards.push(index - 1);
             }
         }
         // 检查右边格子
@@ -455,13 +467,13 @@ class Game {
             let opponentCard = this.board.grid[index + 1].card;
             if (opponentCard.left == 10 && currentCard.right == 1) {
                 this.board.grid[index + 1].owner = this.turn;
-                delay = 1500;
+                capturedCards.push(index + 1);
             }
         }
-        if (delay) {
+        if (capturedCards.length) {
             showMaskedMessage(i18n.getText('ace-killer'));
         }
-        return delay;
+        return capturedCards;
     }
 
     handleOrderAndChaosRules() {
@@ -603,6 +615,153 @@ class Game {
             }
         }
         return 1500;
+    }
+
+    handleSameAndPlusRules(index) {
+        // 处理同数和加算规则
+        if (!this.rules.includes('same') && !this.rules.includes('plus')) {
+            return 0;
+        }
+        let currentCard = this.board.grid[index].card;
+        let opponent = this.turn === 'player' ? 'computer' : 'player';
+        let capturedCards = [];
+        let cardsCapturedBySame = [];
+        let cardsCapturedByPlus = [];
+        let totalDelay = 0;
+
+        if (this.rules.includes('same')) {
+            let sameCount = 0;
+            let opponentCards = [];
+            // 检查上方格子
+            if (index > 2 && this.board.grid[index - 3].card) {
+                let upCard = this.board.grid[index - 3].card;
+                if (upCard.bottom === currentCard.up) {
+                    sameCount++;
+                    if (this.board.grid[index - 3].owner === opponent) {
+                        opponentCards.push(index - 3);
+                    }
+                }
+            }
+            // 检查下方格子
+            if (index < 6 && this.board.grid[index + 3].card) {
+                let downCard = this.board.grid[index + 3].card;
+                if (downCard.up === currentCard.bottom) {
+                    sameCount++;
+                    if (this.board.grid[index + 3].owner === opponent) {
+                        opponentCards.push(index + 3);
+                    }
+                }
+            }
+            // 检查左边格子
+            if (index % 3 !== 0 && this.board.grid[index - 1].card) {
+                let leftCard = this.board.grid[index - 1].card;
+                if (leftCard.right === currentCard.left) {
+                    sameCount++;
+                    if (this.board.grid[index - 1].owner === opponent) {
+                        opponentCards.push(index - 1);
+                    }
+                }
+            }
+            // 检查右边格子
+            if (index % 3 !== 2 && this.board.grid[index + 1].card) {
+                let rightCard = this.board.grid[index + 1].card;
+                if (rightCard.left === currentCard.right) {
+                    sameCount++;
+                    if (this.board.grid[index + 1].card.owner === opponent) {
+                        opponentCards.push(index + 1);
+                    }
+                }
+            }
+            if (sameCount >= 2 && opponentCards.length > 0) {
+                totalDelay += 1300;
+                for (let i = 0; i < opponentCards.length; i++) {
+                    cardsCapturedBySame.push(opponentCards[i]);
+                    this.board.grid[opponentCards[i]].owner = this.turn;
+                }
+            }
+        }
+
+        if (this.rules.includes('plus')) {
+            let plusArr = [];
+            let plusCards = [];
+            // 检查上方格子
+            if (index > 2 && this.board.grid[index - 3].card) {
+                let upCard = this.board.grid[index - 3].card;
+                plusArr.push(upCard.bottom + currentCard.up);
+                plusCards.push(index - 3);
+            }
+            // 检查下方格子
+            if (index < 6 && this.board.grid[index + 3].card) {
+                let downCard = this.board.grid[index + 3].card;
+                plusArr.push(downCard.up + currentCard.bottom);
+                plusCards.push(index + 3);
+            }
+            // 检查左边格子
+            if (index % 3 !== 0 && this.board.grid[index - 1].card) {
+                let leftCard = this.board.grid[index - 1].card;
+                plusArr.push(leftCard.right + currentCard.left);
+                plusCards.push(index - 1);
+            }
+            // 检查右边格子
+            if (index % 3 !== 2 && this.board.grid[index + 1].card) {
+                let rightCard = this.board.grid[index + 1].card;
+                plusArr.push(rightCard.left + currentCard.right);
+                plusCards.push(index + 1);
+            }
+            for (let i = 0; i < plusArr.length; i++) {
+                for (let j = i + 1; j < plusArr.length; j++) {
+                    if (plusArr[i] === plusArr[j]) {
+                        if (this.board.grid[plusCards[i]].owner === opponent) {
+                            cardsCapturedByPlus.push(plusCards[i]);
+                            this.board.grid[plusCards[i]].owner = this.turn;
+                        }
+                        if (this.board.grid[plusCards[j]].owner === opponent) {
+                            cardsCapturedByPlus.push(plusCards[j]);
+                            this.board.grid[plusCards[j]].owner = this.turn;
+                        }
+                    }
+                }
+            }
+            if (cardsCapturedByPlus.length) {
+                totalDelay += 1300;
+            }
+        }
+
+        let messagesToHandle = [];
+        if (cardsCapturedBySame.length) {
+            messagesToHandle.push(() => showMaskedMessage(i18n.getText('same')));
+        }
+        if (cardsCapturedByPlus.length) {
+            messagesToHandle.push(() => showMaskedMessage(i18n.getText('plus')));
+        }
+        for (let i = 0; i < messagesToHandle.length; i++) {
+            setTimeout(() => {
+                messagesToHandle[i]();
+            }, 1300 * i);
+        }
+        capturedCards = capturedCards.concat(cardsCapturedBySame);
+        capturedCards = capturedCards.concat(cardsCapturedByPlus);
+        capturedCards = [...new Set(capturedCards)];
+
+        while (capturedCards.length > 0) {
+            console.log('capturedCards: ');
+            console.log(capturedCards);
+            let tempCapturedCards = [];
+            for (let i = 0; i < capturedCards.length; i++) {
+                tempCapturedCards = tempCapturedCards.concat(this.checkCapture(capturedCards[i]));
+            }
+            if (tempCapturedCards.length === 0) {
+                break;
+            }
+            console.log('tempCapturedCards: ');
+            console.log(tempCapturedCards);
+            setTimeout(() => {
+                showMaskedMessage(i18n.getText('combo'));
+                capturedCards = tempCapturedCards;
+                totalDelay += 1300;
+            }, totalDelay);
+        }
+        return totalDelay;
     }
 }
 

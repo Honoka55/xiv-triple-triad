@@ -167,7 +167,7 @@ function showRuleSelect() {
             rouletteNum.innerHTML = '×' + rouletteCount.value;
         }
     });
-    rouletteCount.addEventListener('change', function () {
+    rouletteCount.addEventListener('input', function () {
         rouletteNum.innerHTML = '×' + this.value;
     });
 
