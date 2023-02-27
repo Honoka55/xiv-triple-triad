@@ -9,6 +9,7 @@ Huijiwiki API employed. Hope it won’t be enough to trouble that resin figure m
 
 ## Change log
 
+- 2023-02-27: **Same**, **Plus** and **Roulette** rules added.
 - 2023-01-22: **Sudden Death**, **Ascension** and **Descension** rules added.
 - 2023-01-19: **Order** and **Chaos** rules added. Multilingual UI implemented.
 - 2023-01-18: Responsive design for cards preliminary implemented. **Reverse** and **Fallen Ace** rules are now available.
