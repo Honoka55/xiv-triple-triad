@@ -79,14 +79,17 @@ function showRuleSelect() {
             </div>
             <button id="start-btn" type="button" data-i18n="start-button"></button>
             <p class="copyright-text">[FFXIV Materials] <wbr>Copyright © 2010-2023 SQUARE ENIX CO., LTD. All Rights Reserved.</p>
-            <select id="language-select" onchange="i18n.setLanguage(this.value); i18n.translate();">
-                <option value="zh">中文</option>
-                <option value="ja">日本語</option>
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="de">Deutsch</option>
-                <option value="ko">한국어</option>
-            </select>
+            <div class="rules-footer">
+                <button id="donate-btn" type="button" data-i18n="donate-button"></button>
+                <select id="language-select" onchange="i18n.setLanguage(this.value); i18n.translate();">
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="ko">한국어</option>
+                </select>
+            </div>
         </div>
     `;
 
@@ -198,6 +201,11 @@ function showRuleSelect() {
             game = new Game(selectedRules);
             game.start();
         }
+    });
+
+    // 捐赠按钮
+    document.getElementById('donate-btn').addEventListener('click', () => {
+        window.open('https://afdian.net/a/honoka55', '_blank');
     });
 }
 

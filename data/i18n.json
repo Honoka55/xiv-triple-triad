@@ -31,7 +31,8 @@
         "blue-wins": "蓝方胜利",
         "red-wins": "红方胜利",
         "draw": "不分胜负",
-        "delimiter": "、"
+        "delimiter": "、",
+        "donate-button": "投喂"
     },
     "ja": {
         "triple-triad": "トリプルトライアド",
@@ -65,7 +66,8 @@
         "blue-wins": "ブルーウィンズ",
         "red-wins": "レッドウィンズ",
         "draw": "ドロー",
-        "delimiter": "・"
+        "delimiter": "・",
+        "donate-button": "サポートする"
     },
     "en": {
         "triple-triad": "Triple Triad",
@@ -99,7 +101,8 @@
         "blue-wins": "Blue Wins",
         "red-wins": "Red Wins",
         "draw": "Draw",
-        "delimiter": ", "
+        "delimiter": ", ",
+        "donate-button": "Buy me a coffee"
     },
     "fr": {
         "triple-triad": "Triple Triade",
@@ -133,7 +136,8 @@
         "blue-wins": "Le bleu a gagné",
         "red-wins": "Le rouge a gagné",
         "draw": "Match nul",
-        "delimiter": ", "
+        "delimiter": ", ",
+        "donate-button": "Achetez-moi un café"
     },
     "de": {
         "triple-triad": "Triple Triad",
@@ -167,7 +171,8 @@
         "blue-wins": "Blau gewinnt",
         "red-wins": "Rot gewinnt",
         "draw": "Unentschieden",
-        "delimiter": ", "
+        "delimiter": ", ",
+        "donate-button": "Kauf mir einen Kaffee"
     },
     "ko": {
         "triple-triad": "트리플 트라이어드",
@@ -201,6 +206,7 @@
         "blue-wins": "파란 카드 승리",
         "red-wins": "빨간 카드 승리",
         "draw": "무승부",
-        "delimiter": ", "
+        "delimiter": ", ",
+        "donate-button": "후원하기"
     }
 }

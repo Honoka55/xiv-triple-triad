@@ -358,11 +358,23 @@ input[type='checkbox'] {
     text-align: center;
 }
 
+.rules-footer {
+    margin-left: auto;
+}
+
+#donate-btn {
+    padding: 0 10px;
+    margin: 0 5px;
+    font-size: 1em;
+    border-radius: 0.4em;
+    text-align: center;
+}
+
 #language-select {
+    padding: 0 5px;
     border-radius: 0.4em;
     font-size: 1.2em;
     text-align: center;
-    align-self: flex-end;
 }
 
 .rule-label {
